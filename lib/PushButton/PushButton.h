@@ -6,6 +6,8 @@ struct pushButtonConfig
     // Min number of ms a signal should be seen
     // to consider button pressed or switched
     int minSignalDurationMs;
+
+    
 };
 
 class PushButton
