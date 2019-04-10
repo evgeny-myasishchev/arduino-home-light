@@ -3,7 +3,7 @@
 
 #include <timers.h>
 
-struct pushButtonConfig
+struct pushButtonSwitchConfig
 {
     // Min number of ms a signal should be seen
     // to consider button pressed or switched
@@ -15,7 +15,7 @@ struct pushButtonConfig
 
     nowMillisProc nowMillis;
 
-    pushButtonConfig(): 
+    pushButtonSwitchConfig(): 
         minSignalDurationMs(200), 
         minSignalIterations(10), 
         nowMillis(defaultNowMillisProc())
@@ -23,12 +23,12 @@ struct pushButtonConfig
     }
 };
 
-class PushButton
+class PushButtonSwitch
 {
 private:
     /* data */
 public:
-    PushButton(pushButtonConfig cfg);
+    PushButtonSwitch(pushButtonSwitchConfig cfg);
 
     // Return state of a button (either LOW or HIGH)
     int getState();
