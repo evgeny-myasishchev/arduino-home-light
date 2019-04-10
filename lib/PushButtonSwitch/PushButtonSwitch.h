@@ -7,15 +7,18 @@ struct pushButtonSwitchConfig
 {
     // Min number of ms a signal should be seen
     // to consider button pressed or switched
-    int minSignalDurationMs;
+    unsigned int minSignalDurationMs;
 
     // Min number of times we've seen the signal
     // to take it in action
     int minSignalIterations;
 
+    Timers * timers;
+
     pushButtonSwitchConfig(): 
         minSignalDurationMs(200), 
-        minSignalIterations(10)
+        minSignalIterations(10),
+        timers(new Timers())
     {
     }
 };
@@ -23,7 +26,12 @@ struct pushButtonSwitchConfig
 class PushButtonSwitch
 {
 private:
-    /* data */
+    int currentState;
+    bool stateChanged;
+    int seenSignalTimes;
+    int seenSignalSince;
+    pushButtonSwitchConfig cfg;
+
 public:
     PushButtonSwitch(pushButtonSwitchConfig cfg);
 
