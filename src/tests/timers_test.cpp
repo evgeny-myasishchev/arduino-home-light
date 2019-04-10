@@ -1,9 +1,9 @@
 #include <ArduinoUnit.h>
 #include <timers.h>
 
-test(defaultNowMillisProc)
+test(timers)
 {
-  nowMillisProc nowMillis = defaultNowMillisProc();
-  const unsigned long now = nowMillis();
+  Timers timers;
+  const unsigned long now = timers.millis();
   assertEqual(now, millis());
 }

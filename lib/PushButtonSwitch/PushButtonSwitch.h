@@ -1,7 +1,7 @@
 #ifndef PushButton_h
 #define PushButton_h
 
-#include <timers.h>
+#include <Timers.h>
 
 struct pushButtonSwitchConfig
 {
@@ -13,12 +13,9 @@ struct pushButtonSwitchConfig
     // to take it in action
     int minSignalIterations;
 
-    nowMillisProc nowMillis;
-
     pushButtonSwitchConfig(): 
         minSignalDurationMs(200), 
-        minSignalIterations(10), 
-        nowMillis(defaultNowMillisProc())
+        minSignalIterations(10)
     {
     }
 };
