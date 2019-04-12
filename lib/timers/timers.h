@@ -4,7 +4,7 @@
 class Timers
 {
 public:
-    unsigned long millis();
+    virtual unsigned long millis();
 };
 
 #endif
