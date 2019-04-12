@@ -2,12 +2,17 @@
 #include <Timers.h>
 #include "FakeTimers.h"
 #include <SwitchService.h>
+#include <ArduinoLog.h>
 
 test(dev_PushButtonSwitchSwitchServiceChangeStateWhenSeenSignalEnough)
 {
     unsigned int nowMillis = random(100, 600);
     int minSignalDurationMs = random(100, 500);
     int minIterations = random(10, 20);
+    Log.trace("Use fake now: %d, minDuration: %d, minIterations: %d" CR, 
+        nowMillis, 
+        minSignalDurationMs, 
+        minIterations);
 
     FakeTimers fakeTimers;
     fakeTimers.setMillis(nowMillis);
