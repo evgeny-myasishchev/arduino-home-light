@@ -11,7 +11,7 @@ PushButtonSwitchService::PushButtonSwitchService(SwitchServiceConfig cfg) : Swit
 }
 
 void PushButtonSwitchService::processSignal(int signal, SwitchStatus *switchStatus) {
-    Log.notice("Processing signal %d, cfg.minSignalIterations: %d" CR, signal, cfg.minSignalIterations);
+    Log.notice("Processing signal %d" CR, signal);
     if(signal == HIGH) {
         switchStatus->seenSignalTimes += 1;
         unsigned long now = cfg.timers->millis();

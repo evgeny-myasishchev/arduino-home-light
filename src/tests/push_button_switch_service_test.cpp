@@ -4,7 +4,7 @@
 #include <SwitchService.h>
 #include <ArduinoLog.h>
 
-test(dev_PushButtonSwitchSwitchServiceChangeStateWhenSeenSignalEnough)
+test(PushButtonSwitchSwitchServiceChangeStateWhenSeenSignalEnough)
 {
     unsigned int nowMillis = random(100, 600);
     int minSignalDurationMs = random(100, 500);
@@ -40,6 +40,6 @@ test(dev_PushButtonSwitchSwitchServiceChangeStateWhenSeenSignalEnough)
     svc->processSignal(HIGH, &status);
     assertTrue(status.stateChanged, "Should not have changed state");
     assertEqual(status.currentState, HIGH, "Should have toggled state");
-    assertEqual(status.seenSignalTimes, minIterations, "Should increment seen times");
+    assertEqual(status.seenSignalTimes, minIterations + 1, "Should increment seen times");
     assertEqual(status.seenSignalSince, nowMillis, "Should remember first time seen signal");
 }
