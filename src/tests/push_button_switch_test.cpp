@@ -10,7 +10,7 @@ test(PushButtonSwitchInitialState)
     assertEqual(btnSwitch->getState(), LOW);
 }
 
-test(dev_PushButtonSwitchLowLevelChangeWhenSeenSignalEnough)
+test(PushButtonSwitchLowLevelChangeWhenSeenSignalEnough)
 {
     unsigned int nowMillis = random(100, 600);
     int minSignalDurationMs = random(100, 500);

@@ -26,15 +26,10 @@ struct SwitchServiceConfig
 struct SwitchStatus
 {
     public:
-        int currentState;
-        bool stateChanged;
-};
-
-struct PushButtonSwitchStatus : SwitchStatus
-{
-    public:
-        int seenSignalTimes;
-        int seenSignalSince;
+        int currentState = 0;
+        bool stateChanged = false;
+        int seenSignalTimes = 0;
+        unsigned int seenSignalSince = 0;
 };
 
 
@@ -44,14 +39,16 @@ protected:
     SwitchServiceConfig cfg;
 public:
     SwitchService(SwitchServiceConfig cfg);
-    virtual void processSignal(int signal, SwitchStatus &switchStatus) = 0;
+    virtual void processSignal(int signal, SwitchStatus *switchStatus) = 0;
+    virtual void applyStateChange(SwitchStatus *switchStatus) = 0;
 };
 
-class PushButtonSwitchService : SwitchService
+class PushButtonSwitchService : public SwitchService
 {
 public:
     PushButtonSwitchService(SwitchServiceConfig cfg);
-    virtual void processSignal(int signal, PushButtonSwitchStatus &switchStatus) = 0;
+    void processSignal(int signal, SwitchStatus *switchStatus);
+    void applyStateChange(SwitchStatus *switchStatus);
 };
 
 
