@@ -7,20 +7,13 @@ struct SwitchServiceConfig
 {
     // Min number of ms a signal should be seen
     // to consider button pressed or switched
-    unsigned int minSignalDurationMs;
+    unsigned int minSignalDurationMs = 200;
 
     // Min number of times we've seen the signal
     // to take it in action
-    int minSignalIterations;
+    int minSignalIterations = 10;
 
-    Timers * timers;
-
-    SwitchServiceConfig(): 
-        minSignalDurationMs(200), 
-        minSignalIterations(10),
-        timers(new Timers())
-    {
-    }
+    Timers * timers = new Timers();
 };
 
 struct SwitchStatus
