@@ -1,5 +1,11 @@
 #include "FakeTimers.h"
 
+FakeTimers::FakeTimers() {}
+
+FakeTimers::FakeTimers(unsigned long currentMillis) {
+    this->currentMillis = currentMillis;
+}
+
 void FakeTimers::setMillis(unsigned long value) {
     this->currentMillis = value;
 }

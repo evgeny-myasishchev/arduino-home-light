@@ -14,6 +14,18 @@ struct SwitchServiceConfig
     int minSignalIterations = 10;
 
     Timers * timers = new Timers();
+
+    SwitchServiceConfig() {}
+
+    SwitchServiceConfig(
+        int minSignalDurationMs, 
+        int minSignalIterations,
+        Timers * timers
+    ) {
+            this -> minSignalDurationMs = minSignalDurationMs;
+            this -> minSignalIterations = minSignalIterations;
+            this -> timers = timers;
+        }
 };
 
 struct SwitchStatus

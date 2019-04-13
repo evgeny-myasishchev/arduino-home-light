@@ -8,6 +8,9 @@ class FakeTimers: public Timers
 private:
     unsigned long currentMillis;
 public:
+    FakeTimers();
+    FakeTimers(unsigned long currentMillis);
+
     void setMillis(unsigned long value);
     void advance(unsigned long step);
 

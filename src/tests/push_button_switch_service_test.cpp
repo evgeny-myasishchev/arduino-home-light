@@ -14,13 +14,13 @@ test(PushButtonSwitchSwitchServiceChangeStateWhenSeenSignalEnough)
         minSignalDurationMs, 
         minIterations);
 
-    FakeTimers fakeTimers;
-    fakeTimers.setMillis(nowMillis);
+    FakeTimers fakeTimers = FakeTimers(nowMillis);
 
-    SwitchServiceConfig cfg;
-    cfg.minSignalDurationMs = minSignalDurationMs;
-    cfg.minSignalIterations = minIterations;
-    cfg.timers = &fakeTimers;
+    SwitchServiceConfig cfg = SwitchServiceConfig(
+        minSignalDurationMs,
+        minIterations,
+        &fakeTimers
+    );
     SwitchService * svc = new PushButtonSwitchService(cfg);
 
     SwitchStatus status;
