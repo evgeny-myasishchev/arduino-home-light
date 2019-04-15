@@ -10,11 +10,7 @@ OBJ_DIR := $(BUILD)/objects
 APP_DIR := $(BUILD)/apps
 TARGET := program
 INCLUDE_FILES  := \
-	$(dir $(wildcard src/tests/*.h)) \
-	$(dir $(wildcard lib/*/*.h)) \
-	$(dir $(wildcard src/*.h)) \
-	$(dir $(wildcard $(PIO_USER_LIBS_HOME)/*/*.h)) \
-	$(dir $(wildcard $(PIO_USER_LIBS_HOME)/*/src/*.h))
+	$(dir $(wildcard lib-universal/*/*.h))
 INCLUDE := $(INCLUDE_FILES:%=-I%)
 
 # This should not be part of src for now
@@ -22,28 +18,25 @@ INCLUDE := $(INCLUDE_FILES:%=-I%)
 # $(wildcard src/*.cpp)
 
 SRC := \
-	$(wildcard src/tests/*.cpp) \
-	$(wildcard lib/*/*.cpp) \
-	$(wildcard $(PIO_USER_LIBS_HOME)/*.cpp) \
-	$(wildcard $(PIO_USER_LIBS_HOME)/src/*.cpp)
+	$(wildcard test/*.cpp) \
+	$(wildcard lib-universal/*/*.cpp) \
+	$(wildcard $(PIO_USER_LIBS_HOME)/googletest_ID5976/googletest/src/*.cc)
 OBJECTS := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 
 INCLUDE += \
-	-I$(FRAMEWORK_DIR)/cores/arduino/ \
-	-I$(FRAMEWORK_DIR)/cores/core13/ \
-	-I$(PIO_HOME)/packages/toolchain-atmelavr/avr/include
+	-I$(PIO_USER_LIBS_HOME)/googletest_ID5976/googletest/include/ \
+	-I$(PIO_USER_LIBS_HOME)/googletest_ID5976/googletest/
 
 all: build $(APP_DIR)/$(TARGET)
 
 $(OBJ_DIR)/%.o: %.cpp
-	echo "Hello"
-	echo mkdir -p $(@D)
+	@mkdir -p $(@D)
+	@echo Buidling object for $<
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -o $@ -c $<
 
 $(APP_DIR)/$(TARGET): $(OBJECTS)
-	echo "Hello"
-	mkdir -p $(@D)
-	echo $(CXX) $(CXXFLAGS) $(INCLUDE) $(LDFLAGS) -o $(APP_DIR)/$(TARGET) $(OBJECTS)
+	@mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) $(INCLUDE) $(LDFLAGS) -o $(APP_DIR)/$(TARGET) $(OBJECTS)
 
 .PHONY: all build clean debug release
 
