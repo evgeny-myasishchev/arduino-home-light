@@ -3,7 +3,7 @@ PIO_HOME := $(HOME)/.platformio
 FRAMEWORK_DIR := $(PIO_HOME)/packages/framework-arduinoavr
 
 CXX := g++
-CXXFLAGS := -g -std=gnu++11
+CXXFLAGS := -g -std=gnu++11 -D UNIVERSAL
 LDFLAGS  := -L/usr/lib -lstdc++ -lm
 BUILD := build
 OBJ_DIR := $(BUILD)/objects
@@ -19,6 +19,7 @@ INCLUDE := $(INCLUDE_FILES:%=-I%)
 
 CPP_SRC := \
 	$(wildcard test/*.cpp) \
+	$(wildcard test/**/*.cpp) \
 	$(wildcard lib-universal/*/*.cpp)
 CC_SRC := \
 	$(wildcard $(PIO_USER_LIBS_HOME)/googletest_ID5976/googletest/src/*.cc)
