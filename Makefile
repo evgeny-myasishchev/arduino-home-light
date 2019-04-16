@@ -1,11 +1,11 @@
-PIO_USER_LIBS_HOME=$(PWD)/.piolibdeps
+PIO_USER_LIBS_HOME=.piolibdeps
 PIO_HOME := $(HOME)/.platformio
 FRAMEWORK_DIR := $(PIO_HOME)/packages/framework-arduinoavr
 
 CXX := g++
 CXXFLAGS := -g -std=gnu++11
 LDFLAGS  := -L/usr/lib -lstdc++ -lm
-BUILD := $(PWD)/build
+BUILD := build
 OBJ_DIR := $(BUILD)/objects
 APP_DIR := $(BUILD)/apps
 TARGET := program
@@ -17,11 +17,12 @@ INCLUDE := $(INCLUDE_FILES:%=-I%)
 # As it includes main program main
 # $(wildcard src/*.cpp)
 
-SRC := \
+CPP_SRC := \
 	$(wildcard test/*.cpp) \
-	$(wildcard lib-universal/*/*.cpp) \
+	$(wildcard lib-universal/*/*.cpp)
+CC_SRC := \
 	$(wildcard $(PIO_USER_LIBS_HOME)/googletest_ID5976/googletest/src/*.cc)
-OBJECTS := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
+OBJECTS := $(CPP_SRC:%.cpp=$(OBJ_DIR)/%.o) $(CC_SRC:%.cc=$(OBJ_DIR)/%.o)
 
 INCLUDE += \
 	-I$(PIO_USER_LIBS_HOME)/googletest_ID5976/googletest/include/ \
@@ -29,7 +30,7 @@ INCLUDE += \
 
 all: build $(APP_DIR)/$(TARGET)
 
-$(OBJ_DIR)/%.o: %.cpp
+$(OBJ_DIR)/%.o: %.c*
 	@mkdir -p $(@D)
 	@echo Buidling object for $<
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -o $@ -c $<
@@ -37,6 +38,9 @@ $(OBJ_DIR)/%.o: %.cpp
 $(APP_DIR)/$(TARGET): $(OBJECTS)
 	@mkdir -p $(@D)
 	$(CXX) $(CXXFLAGS) $(INCLUDE) $(LDFLAGS) -o $(APP_DIR)/$(TARGET) $(OBJECTS)
+
+run-test: $(APP_DIR)/$(TARGET)
+	$(APP_DIR)/$(TARGET)
 
 .PHONY: all build clean debug release
 
