@@ -40,8 +40,7 @@ $(APP_DIR)/$(TARGET): $(OBJECTS)
 	@mkdir -p $(@D)
 	$(CXX) $(CXXFLAGS) $(INCLUDE) $(LDFLAGS) -o $(APP_DIR)/$(TARGET) $(OBJECTS)
 
-run-test: $(APP_DIR)/$(TARGET)
-	$(APP_DIR)/$(TARGET)
+build-test: $(APP_DIR)/$(TARGET)
 
 .PHONY: all build clean debug release
 
