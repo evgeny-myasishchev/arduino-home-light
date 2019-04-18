@@ -14,7 +14,7 @@ namespace logger
     public:
         virtual void print(const char*) = 0;
         virtual void print(char) = 0;
-        virtual void print(int, int) = 0;
+        // virtual void print(int, int) = 0;
     };
 
     void printf(Output * out, const char *format, ...);
