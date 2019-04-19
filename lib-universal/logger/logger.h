@@ -5,11 +5,6 @@
 
 namespace logger
 {
-    #define DEC 10
-    #define HEX 16
-    #define OCT 8
-    #define BIN 2
-
     class Output
     {
     public:
@@ -29,6 +24,12 @@ namespace logger
         void print(char);
         void print(int, int);
     };
+
+    struct LoggingSystem {
+        Output *output;
+    };
+
+    void setupLoggingSystem(Output *output);
 
     void printf(Output * out, const char *format, ...);
 
