@@ -5,63 +5,39 @@
 namespace
 {
 
-class MockOutput : public logger::Output
-{
-    private:
-        std::string result;
-    public:
-        std::string currentOutput();
-
-        void print(const char*);
-        void print(char);
-        // void print(int, int);
-
-        void clean();
-};
-
-std::string MockOutput::currentOutput() {
-    return this->result;
-}
-
-void MockOutput::print(const char* val) {
-    result += val;
-}
-
-void MockOutput::print(const char val) {
-    result += val;
-}
-
-void MockOutput::clean() {
-    result = "";
-}
-
-void formatString(logger::Output * out, const char *format, ...)
-{
-    va_list args;
-    va_start(args, format);
-
-    //
-    // loop through format string
-    for (; *format != 0; ++format)
+    class MockOutput : public logger::Output
     {
-        if (*format == '%')
-        {
-            ++format;
-            if (*format == '\0')
-                break;
-            if (*format == '%')
-            {
-                continue;
-            }
-            if (*format == 's')
-            {
-                out->print(va_arg(args, char*));
-                continue;
-            }
-        }
-        out->print((char)*format);
+        private:
+            std::stringstream result;
+        public:
+            std::string currentOutput();
+
+            void print(const char*);
+            void print(char);
+            void print(int, int);
+
+            void clean();
+    };
+
+    std::string MockOutput::currentOutput() {
+        return this->result.str();
     }
-}
+
+    void MockOutput::print(const char* val) {
+        result << val;
+    }
+
+    void MockOutput::print(const char val) {
+        result << val;
+    }
+
+    void MockOutput::print(int val, int format) {
+        result << val;
+    }
+
+    void MockOutput::clean() {
+        result = std::stringstream();
+    }
 
     TEST(logger, printf)
     {
@@ -82,9 +58,13 @@ void formatString(logger::Output * out, const char *format, ...)
         EXPECT_EQ("Single string param: str1", out.currentOutput());
         out.clean();
 
-        // logger::printf(&out, "String params %s, %s", "str1", "str2");
-        // EXPECT_EQ("String params str1, str2", out.currentOutput());
-        // out.clean();
+        logger::printf(&out, "Multiple string params %s, %s", "str1", "str2");
+        EXPECT_EQ("Multiple string params str1, str2", out.currentOutput());
+        out.clean();
+
+        logger::printf(&out, "Number params %i, %i", 10, 20);
+        EXPECT_EQ("Number params 10, 20", out.currentOutput());
+        out.clean();
 
         // logger::printf(&out, "String params %");
         // EXPECT_EQ("String params str2, str2", out.currentOutput());
