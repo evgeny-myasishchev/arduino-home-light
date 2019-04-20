@@ -1,10 +1,16 @@
 #ifndef LOGGER_H
 
+#ifdef ARDUINO
 #include <Print.h>
+#endif
+
 #include <stdarg.h>
+#include <Timers.h>
 
 namespace logger
 {
+    #define DEC 10
+
     class Output
     {
     public:
@@ -13,6 +19,7 @@ namespace logger
         virtual void print(int, int) = 0;
     };
 
+#ifdef ARDUINO
     class PrintOutput : public Output
     {
     private:
@@ -23,6 +30,19 @@ namespace logger
         void print(const char*);
         void print(char);
         void print(int, int);
+    };
+#endif
+
+    class Logger
+    {
+    private:
+        Output * output;
+        Timers timers;
+    public:
+        Logger(Timers timers, Output * output);
+        void error(const char* msg, ...);
+        void info(const char* msg, ...);
+        void debug(const char* msg, ...);
     };
 
     struct LoggingSystem {

@@ -2,6 +2,7 @@
 
 namespace logger
 {
+#ifdef ARDUINO
     PrintOutput::PrintOutput(Print* target) {
         this->target = target;
     };
@@ -16,6 +17,19 @@ namespace logger
 
     void PrintOutput::print(int value, int format) {
         this->target->print(value, format);
+    }
+#endif
+
+    Logger::Logger(Timers timers, Output * output) {
+        this->timers = timers;
+        this->output = output;
+    }
+
+    void Logger::info(const char* msg, ...) {
+        va_list args;
+        printf(this->output, "[INFO]");
+        printf(this->output, msg, *args);
+        printf(this->output, "\n");
     }
 
     LoggingSystem * defaultLoggingSystem;

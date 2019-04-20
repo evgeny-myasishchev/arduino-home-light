@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <logger.h>
 #include <stdio.h>
+#include "mocks/FakeTimers.h"
 
 namespace
 {
@@ -69,5 +70,16 @@ namespace
         // logger::printf(&out, "String params %");
         // EXPECT_EQ("String params str2, str2", out.currentOutput());
         // out.clean();
+    }
+
+    TEST(logger, Logger)
+    {
+        const int rnd = std::rand();
+        FakeTimers fakeTimers;
+        fakeTimers.setMillis(rnd);
+        MockOutput out;
+        logger::Logger logger(fakeTimers, &out);
+        logger.info("Info message: %s", "some val");
+        EXPECT_EQ("[INFO %s] Info message: some val\n", out.currentOutput());
     }
 } // namespace
