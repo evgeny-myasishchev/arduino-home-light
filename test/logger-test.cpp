@@ -80,6 +80,7 @@ namespace
         MockOutput out;
         logger::Logger logger(fakeTimers, &out);
         logger.info("Info message: %s", "some val");
-        EXPECT_EQ("[INFO %s] Info message: some val\n", out.currentOutput());
+        std::string expected = "[INFO " + std::to_string(rnd) + "] Info message: some val\n";
+        EXPECT_EQ(expected, out.currentOutput());
     }
 } // namespace
