@@ -20,16 +20,9 @@ namespace logger
     }
 #endif
 
-    Logger::Logger(Timers timers, Output * output) {
+    Logger::Logger(Timers * timers, Output * output) {
         this->timers = timers;
         this->output = output;
-    }
-
-    void Logger::info(const char* msg, ...) {
-        va_list args;
-        printf(this->output, "[INFO]");
-        printf(this->output, msg, *args);
-        printf(this->output, "\n");
     }
 
     LoggingSystem * defaultLoggingSystem;

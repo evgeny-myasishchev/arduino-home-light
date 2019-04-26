@@ -19,6 +19,8 @@ namespace logger
         virtual void print(int, int) = 0;
     };
 
+    void printf(Output * out, const char *format, ...);
+
 #ifdef ARDUINO
     class PrintOutput : public Output
     {
@@ -37,12 +39,14 @@ namespace logger
     {
     private:
         Output * output;
-        Timers timers;
+        Timers * timers;
     public:
-        Logger(Timers timers, Output * output);
-        void error(const char* msg, ...);
-        void info(const char* msg, ...);
-        void debug(const char* msg, ...);
+        Logger(Timers * timers, Output * output);
+        template<typename... Args> void log(const char * msg, Args... args) {
+            logger::printf(this->output, "[INFO %d] ", this->timers->millis());
+            logger::printf(this->output, msg, args...);
+            printf(this->output, "\n");
+        }
     };
 
     struct LoggingSystem {
@@ -50,9 +54,6 @@ namespace logger
     };
 
     void setupLoggingSystem(Output *output);
-
-    void printf(Output * out, const char *format, ...);
-
 } // namespace logger
 
 #endif

@@ -78,8 +78,8 @@ namespace
         FakeTimers fakeTimers;
         fakeTimers.setMillis(rnd);
         MockOutput out;
-        logger::Logger logger(fakeTimers, &out);
-        logger.info("Info message: %s", "some val");
+        logger::Logger logger(&fakeTimers, &out);
+        logger.log("Info message: %s", "some val");
         std::string expected = "[INFO " + std::to_string(rnd) + "] Info message: some val\n";
         EXPECT_EQ(expected, out.currentOutput());
     }
