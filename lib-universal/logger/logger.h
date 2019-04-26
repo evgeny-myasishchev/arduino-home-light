@@ -1,5 +1,8 @@
 #ifndef LOGGER_H
 
+// To disable define this somewhere before including logger.h
+// #ifndef DISABLE_LOGGING
+
 #ifdef ARDUINO
 #include <Print.h>
 #endif
@@ -56,10 +59,15 @@ namespace logger
     void setupLoggingSystem(Timers * timers, Output *output);
     void setupLoggingSystem(Output *output);
     LoggingSystem * getLoggingSystem();
-
-    #define logger_log(msg, ...)  logger::getLoggingSystem()->logger->log(msg, ##__VA_ARGS__)
-
     // LoggingSystem * defaultLoggingSystem;
 } // namespace logger
+
+#ifndef DISABLE_LOGGING
+#define logger_setup(out) logger::setupLoggingSystem(new logger::PrintOutput(out))
+#define logger_log(msg, ...)  logger::getLoggingSystem()->logger->log(msg, ##__VA_ARGS__)
+#else
+#define logger_setup(out)
+#define logger_log(msg, ...)
+#endif
 
 #endif

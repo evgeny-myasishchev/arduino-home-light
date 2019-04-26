@@ -59,3 +59,11 @@ test(logger_log)
     logger.log("Sample log: %s, %s", "str1", "str2");
     assertEqual("[INFO 0] Sample log: str1, str2\n", out.currentOutput());
 }
+
+test(logger_macros)
+{
+    logger_setup(&Serial);
+    logger_log("String with params %s, %s", "param1", "param2");
+    Serial.println("Expected output - String with params: param1, param2");
+    Serial.println("Please compare manually");
+}
