@@ -37,16 +37,25 @@ void MockOutput::clean() {
 
 test(logger_printf)
 {
-  MockOutput out;
-  logger::printf(&out, "String with params: %s, %s, %d, %i", "str1", "str2", 10, 20);
-  assertEqual("String with params: str1, str2, 10, 20", out.currentOutput());
-  out.clean();
+    MockOutput out;
+    logger::printf(&out, "String with params: %s, %s, %d, %i", "str1", "str2", 10, 20);
+    assertEqual("String with params: str1, str2, 10, 20", out.currentOutput());
+    out.clean();
 }
 
 test(logger_printf_serial)
 {
-  logger::PrintOutput out(&Serial);
-  logger::printf(&out, "Actual output - String with params: %s, %s, %d, %i\n", "str1", "str2", 10, 20);
-  Serial.println("Expected output - String with params: str1, str2, 10, 20");
-  Serial.println("Please compare manually");
+    logger::PrintOutput out(&Serial);
+    logger::printf(&out, "Actual output - String with params: %s, %s, %d, %i\n", "str1", "str2", 10, 20);
+    Serial.println("Expected output - String with params: str1, str2, 10, 20");
+    Serial.println("Please compare manually");
+}
+
+test(logger_log)
+{
+    MockOutput out;
+    Timers timers;
+    logger::Logger logger(&timers, &out);
+    logger.log("Sample log: %s, %s", "str1", "str2");
+    assertEqual("[INFO 0] Sample log: str1, str2\n", out.currentOutput());
 }
