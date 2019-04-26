@@ -50,10 +50,16 @@ namespace logger
     };
 
     struct LoggingSystem {
-        Output *output;
+        Logger * logger;
     };
 
+    void setupLoggingSystem(Timers * timers, Output *output);
     void setupLoggingSystem(Output *output);
+    LoggingSystem * getLoggingSystem();
+
+    #define logger_log(msg, ...)  logger::getLoggingSystem()->logger->log(msg, ##__VA_ARGS__)
+
+    // LoggingSystem * defaultLoggingSystem;
 } // namespace logger
 
 #endif
