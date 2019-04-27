@@ -7,13 +7,9 @@
 #include <random>
 #include "logger.h"
 #include "test-lib/random.h"
-#include "test-lib/test-logger.h"
-
 
 TEST(switchService, ChangeStateWhenSeenSignalEnough)
 {
-    setup_test_logger();
-
     unsigned int nowMillis = test::randomNumber(100, 600);
     int minSignalDurationMs = test::randomNumber(100, 600);
     int minIterations = test::randomNumber(100, 600);
@@ -23,15 +19,15 @@ TEST(switchService, ChangeStateWhenSeenSignalEnough)
     SwitchServiceConfig cfg = SwitchServiceConfig(
         minSignalDurationMs,
         minIterations,
-        &fakeTimers
-    );
-    SwitchService * svc = new PushButtonSwitchService(cfg);
+        &fakeTimers);
+    SwitchService *svc = new PushButtonSwitchService(cfg);
 
     SwitchStatus status;
 
     int durationIncrease = minSignalDurationMs / minIterations;
 
-    for(int i = 0; i < minIterations; i++) {
+    for (int i = 0; i < minIterations; i++)
+    {
         svc->processSignal(HIGH, &status);
         // EXPECT_TRUE(status.stateChanged) << "Should not have changed state";
         // EXPECT_EQ(status.currentState, LOW) << "Should not have toggled state";
