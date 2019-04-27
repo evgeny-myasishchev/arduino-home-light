@@ -57,7 +57,6 @@ namespace logger
         Logger * logger;
     };
 
-    void setupLoggingSystem(Timers * timers, Output *output);
     void setupLoggingSystem(Output *output);
     LoggingSystem * getLoggingSystem();
     // LoggingSystem * defaultLoggingSystem;

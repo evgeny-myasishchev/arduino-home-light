@@ -28,12 +28,8 @@ namespace logger
     LoggingSystem * defaultLoggingSystem;
 
     void setupLoggingSystem(Output *output) {
-        setupLoggingSystem(new Timers(), output);
-    }
-
-    void setupLoggingSystem(Timers * timers, Output *output) {
         defaultLoggingSystem = new LoggingSystem();
-        defaultLoggingSystem->logger = new Logger(timers, output);
+        defaultLoggingSystem->logger = new Logger(new Timers(), output);
     }
 
     LoggingSystem * getLoggingSystem() {

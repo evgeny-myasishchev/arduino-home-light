@@ -83,17 +83,4 @@ namespace
         std::string expected = "[INFO " + std::to_string(rnd) + "] Info message: some val\n";
         EXPECT_EQ(expected, out.currentOutput());
     }
-
-    TEST(logger, setupLoggingSystem)
-    {
-        const int rnd = std::rand();
-        FakeTimers fakeTimers;
-        fakeTimers.setMillis(rnd);
-        MockOutput out;
-
-        logger::setupLoggingSystem(&fakeTimers, &out);
-        logger_log("Log message: %s, %s", "some val1", "some val2");
-        std::string expected = "[INFO " + std::to_string(rnd) + "] Log message: some val1, some val2\n";
-        EXPECT_EQ(expected, out.currentOutput());
-    }
 } // namespace
