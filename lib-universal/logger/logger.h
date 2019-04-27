@@ -1,4 +1,5 @@
 #ifndef LOGGER_H
+#define LOGGER_H
 
 // To disable define this somewhere before including logger.h
 // #ifndef DISABLE_LOGGING
