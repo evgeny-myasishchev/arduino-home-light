@@ -14,22 +14,22 @@ TEST(switchService, ChangeStateWhenSeenSignalEnough)
     int minSignalDurationMs = test::randomNumber(100, 600);
     int minIterations = test::randomNumber(100, 600);
 
-    FakeTimers fakeTimers = FakeTimers(nowMillis);
+    FakeTimers * fakeTimers = new FakeTimers(nowMillis);
 
-    SwitchServiceConfig cfg = SwitchServiceConfig(
+    switch_service::SwitchServiceConfig cfg = switch_service::SwitchServiceConfig(
         minSignalDurationMs,
         minIterations,
-        &fakeTimers);
-    SwitchService *svc = new PushButtonSwitchService(cfg);
+        fakeTimers);
+    switch_service::SwitchService *svc = new switch_service::PushButtonSwitchService(cfg);
 
-    SwitchStatus status;
+    switch_service::SwitchStatus status;
 
     int durationIncrease = minSignalDurationMs / minIterations;
 
     for (int i = 0; i < minIterations; i++)
     {
         svc->processSignal(HIGH, &status);
-        // EXPECT_TRUE(status.stateChanged) << "Should not have changed state";
+        EXPECT_TRUE(status.stateChanged) << "Should not have changed state";
         // EXPECT_EQ(status.currentState, LOW) << "Should not have toggled state";
         // EXPECT_EQ(status.seenSignalSince, nowMillis) << "Should remember first time seen signal";
         // EXPECT_EQ(status.seenSignalTimes, i + 1) << "Should increment seen times";
