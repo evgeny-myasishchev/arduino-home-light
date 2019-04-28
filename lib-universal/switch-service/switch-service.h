@@ -4,7 +4,8 @@
 #include <Timers.h>
 #include <logger.h>
 
-namespace switch_service {
+namespace switch_service
+{
 
 #ifdef SWITCH_SERVICE_VERBOSE
 #define service_log logger_log
@@ -22,35 +23,50 @@ struct SwitchServiceConfig
     // to take it in action
     int minSignalIterations = 10;
 
-    Timers * timers = new Timers();
+    Timers *timers = new Timers();
 
     SwitchServiceConfig() {}
 
     SwitchServiceConfig(
-        int minSignalDurationMs, 
+        int minSignalDurationMs,
         int minSignalIterations,
-        Timers * timers
-    ) {
-            this -> minSignalDurationMs = minSignalDurationMs;
-            this -> minSignalIterations = minSignalIterations;
-            this -> timers = timers;
-        }
+        Timers *timers)
+    {
+        this->minSignalDurationMs = minSignalDurationMs;
+        this->minSignalIterations = minSignalIterations;
+        this->timers = timers;
+    }
 };
 
 struct SwitchStatus
 {
-    public:
-        int currentState = 0;
-        bool stateChanged = false;
-        int seenSignalTimes = 0;
-        unsigned int seenSignalSince = 0;
-};
+public:
+    int currentState = 0;
+    bool stateChanged = false;
+    int seenSignalTimes = 0;
+    unsigned int seenSignalSince = 0;
 
+    SwitchStatus() {}
+
+    SwitchStatus(
+        int currentState = 0,
+        bool stateChanged,
+        int seenSignalTimes,
+        unsigned int seenSignalSince)
+    {
+        this->currentState = currentState;
+        this->stateChanged = stateChanged;
+        this->currentState = currentState;
+        this->seenSignalTimes = seenSignalTimes;
+        this->seenSignalSince = seenSignalSince;
+    }
+};
 
 class SwitchService
 {
 protected:
     SwitchServiceConfig cfg;
+
 public:
     SwitchService(SwitchServiceConfig cfg);
     virtual void processSignal(int signal, SwitchStatus *switchStatus) = 0;
@@ -65,6 +81,6 @@ public:
     void applyStateChange(SwitchStatus *switchStatus);
 };
 
-}
+} // namespace switch_service
 
 #endif
