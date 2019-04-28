@@ -3,6 +3,8 @@
 
 #include <Timers.h>
 
+namespace switch_service {
+
 struct SwitchServiceConfig
 {
     // Min number of ms a signal should be seen
@@ -56,5 +58,6 @@ public:
     void applyStateChange(SwitchStatus *switchStatus);
 };
 
+}
 
 #endif

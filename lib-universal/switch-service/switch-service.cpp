@@ -2,6 +2,16 @@
 #include <arduino-compat.h>
 #include <logger.h>
 
+// #define SWITCH_SERVICE_VERBOSE
+
+namespace switch_service {
+
+#ifdef SWITCH_SERVICE_VERBOSE
+#define service_log logger_log
+#else
+#define service_log
+#endif
+
 SwitchService::SwitchService(SwitchServiceConfig cfg) {
     this->cfg = cfg;
 }
@@ -11,12 +21,12 @@ PushButtonSwitchService::PushButtonSwitchService(SwitchServiceConfig cfg) : Swit
 }
 
 void PushButtonSwitchService::processSignal(int signal, SwitchStatus *switchStatus) {
-    logger_log("Processing signal %d", signal);
+    service_log("Processing signal %d", signal);
     if(signal == HIGH) {
         switchStatus->seenSignalTimes += 1;
         unsigned long now = cfg.timers->millis();
         if(switchStatus->seenSignalSince == 0) {
-            logger_log("Seen signal for a first time, now is: %d", now);
+            service_log("Seen signal for a first time, now is: %d", now);
             switchStatus->seenSignalSince = now;
         };
 
@@ -29,4 +39,6 @@ void PushButtonSwitchService::processSignal(int signal, SwitchStatus *switchStat
 }
 
 void PushButtonSwitchService::applyStateChange(SwitchStatus *switchStatus) {
+}
+
 }
