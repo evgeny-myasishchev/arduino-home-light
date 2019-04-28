@@ -49,7 +49,7 @@ public:
     SwitchStatus() {}
 
     SwitchStatus(
-        int currentState = 0,
+        int currentState,
         bool stateChanged,
         int seenSignalTimes,
         unsigned int seenSignalSince)
