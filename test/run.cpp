@@ -28,27 +28,11 @@ public:
   }
 };
 
-class Environment : public ::testing::Environment
-{
-  // Override this to define how to set up the environment.
-  void SetUp()
-  {
-    logger_log("test start");
-  }
-
-  // Override this to define how to tear down the environment.
-  void TearDown()
-  {
-    logger_log("test end");
-  }
-};
-
 int main(int argc, char **argv)
 {
   std::srand(std::time(nullptr));
   ::testing::InitGoogleTest(&argc, argv);
   std::ofstream testLogOutput("test.log", std::ofstream::out | std::ofstream::trunc);
   logger::setupLoggingSystem(new FileOutput(&testLogOutput));
-  ::testing::AddGlobalTestEnvironment(new Environment());
   return RUN_ALL_TESTS();
 }
