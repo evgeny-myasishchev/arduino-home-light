@@ -2,8 +2,15 @@
 #define SwitchService_h
 
 #include <Timers.h>
+#include <logger.h>
 
 namespace switch_service {
+
+#ifdef SWITCH_SERVICE_VERBOSE
+#define service_log logger_log
+#else
+#define service_log
+#endif
 
 struct SwitchServiceConfig
 {

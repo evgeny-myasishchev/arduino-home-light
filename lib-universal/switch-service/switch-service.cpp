@@ -1,19 +1,14 @@
 #include <switch-service.h>
 #include <arduino-compat.h>
-#include <logger.h>
-
-// #define SWITCH_SERVICE_VERBOSE
 
 namespace switch_service {
 
-#ifdef SWITCH_SERVICE_VERBOSE
-#define service_log logger_log
-#else
-#define service_log
-#endif
-
 SwitchService::SwitchService(SwitchServiceConfig cfg) {
     this->cfg = cfg;
+    logger_log("Init switch service: minSignalDurationMs=%d, minSignalIterations=%d", 
+        cfg.minSignalDurationMs,
+        cfg.minSignalIterations
+        );
 }
 
 PushButtonSwitchService::PushButtonSwitchService(SwitchServiceConfig cfg) : SwitchService(cfg) {
@@ -21,7 +16,7 @@ PushButtonSwitchService::PushButtonSwitchService(SwitchServiceConfig cfg) : Swit
 }
 
 void PushButtonSwitchService::processSignal(int signal, SwitchStatus *switchStatus) {
-    service_log("Processing signal %d", signal);
+    service_log("Processing signal %d, seen times: %d, since: %d", signal, switchStatus->seenSignalTimes, switchStatus->seenSignalSince);
     if(signal == HIGH) {
         switchStatus->seenSignalTimes += 1;
         unsigned long now = cfg.timers->millis();
@@ -30,10 +25,15 @@ void PushButtonSwitchService::processSignal(int signal, SwitchStatus *switchStat
             switchStatus->seenSignalSince = now;
         };
 
+        const unsigned int signalDuration = now - switchStatus->seenSignalSince;
+
+
         if(switchStatus->seenSignalTimes >= cfg.minSignalIterations && 
-            (now - switchStatus->seenSignalSince) >= cfg.minSignalDurationMs) {
+             signalDuration >= cfg.minSignalDurationMs) {
+
             switchStatus->stateChanged = true;
             switchStatus->currentState = switchStatus->currentState == LOW ? HIGH : LOW;
+            service_log("State change detected. Signal duration: %d, new state: %d", signalDuration, switchStatus->currentState);
         }
     }
 }

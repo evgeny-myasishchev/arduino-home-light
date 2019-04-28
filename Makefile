@@ -3,7 +3,7 @@ PIO_HOME := $(HOME)/.platformio
 FRAMEWORK_DIR := $(PIO_HOME)/packages/framework-arduinoavr
 
 CXX := g++
-CXXFLAGS := -g -std=gnu++11 -D UNIVERSAL
+CXXFLAGS := -g -std=gnu++11 -D UNIVERSAL -D SWITCH_SERVICE_VERBOSE
 LDFLAGS  := -L/usr/lib -lstdc++ -lm
 BUILD := build
 OBJ_DIR := $(BUILD)/objects
