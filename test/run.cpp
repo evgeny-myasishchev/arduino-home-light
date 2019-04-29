@@ -28,11 +28,49 @@ public:
   }
 };
 
+class TestProgressLogger : public ::testing::EmptyTestEventListener
+{
+  // Called before a test starts.
+  virtual void OnTestStart(const ::testing::TestInfo &test_info)
+  {
+    logger_log("*** Test %s.%s starting.",
+               test_info.test_suite_name(), test_info.name());
+  }
+
+  // Called after a failed assertion or a SUCCESS().
+  virtual void OnTestPartResult(const ::testing::TestPartResult &test_part_result)
+  {
+    const char * status = test_part_result.failed() ? "*** Failure" : "Success";
+    logger_log("%s in %s:%d\n%s\n",
+               status,
+               test_part_result.file_name(),
+               test_part_result.line_number(),
+               test_part_result.summary());
+  }
+
+  // Called after a test ends.
+  virtual void OnTestEnd(const ::testing::TestInfo &test_info)
+  {
+    const testing::TestResult * result = test_info.result();
+
+    const char * status = result->Failed() ? "*** Failure" : "Success";
+    logger_log("*** Test %s.%s end with: %s",
+               test_info.test_suite_name(), 
+               test_info.name(),
+               status
+               );
+  }
+};
+
 int main(int argc, char **argv)
 {
   std::srand(std::time(nullptr));
   ::testing::InitGoogleTest(&argc, argv);
   std::ofstream testLogOutput("test.log", std::ofstream::out | std::ofstream::trunc);
   logger::setupLoggingSystem(new FileOutput(&testLogOutput));
+
+  ::testing::TestEventListeners &listeners = ::testing::UnitTest::GetInstance()->listeners();
+  listeners.Append(new TestProgressLogger);
+
   return RUN_ALL_TESTS();
 }

@@ -10,8 +10,6 @@
 
 TEST(switchService, ChangeStateHighWhenSeenSignalEnough)
 {
-    logger_log("TEST START: switchService, ChangeStateWhenSeenSignalEnough");
-
     unsigned int nowMillis = test::randomNumber(100, 600);
     int minSignalDurationMs = test::randomNumber(100, 600);
     int minIterations = test::randomNumber(5, 10);
@@ -47,14 +45,10 @@ TEST(switchService, ChangeStateHighWhenSeenSignalEnough)
     EXPECT_EQ(status.currentState, HIGH) << "Should have HIGH value";
     EXPECT_EQ(status.seenSignalTimes, minIterations + 1) << "Should increment seen times";
     EXPECT_EQ(status.seenSignalSince, nowMillis) << "Should remember first time seen signal";
-
-    logger_log("TEST END: switchService, ChangeStateWhenSeenSignalEnough");
 }
 
 TEST(switchService, DoesntChangeStateOnLow)
 {
-    logger_log("TEST START: switchService, DoesntChangeStateOnLow");
-
     unsigned int nowMillis = test::randomNumber(100, 600);
     int minSignalDurationMs = test::randomNumber(100, 600);
     int minIterations = test::randomNumber(5, 10);
@@ -90,6 +84,4 @@ TEST(switchService, DoesntChangeStateOnLow)
         EXPECT_EQ(status.seenSignalTimes, seenSignalTimes) << "Should not increment seen times";
         fakeTimers->advance(durationIncrease);
     }
-
-    logger_log("TEST END: switchService, DoesntChangeStateOnLow");
 }
