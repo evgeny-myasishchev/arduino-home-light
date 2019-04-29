@@ -30,14 +30,12 @@ public:
 
 class TestProgressLogger : public ::testing::EmptyTestEventListener
 {
-  // Called before a test starts.
   virtual void OnTestStart(const ::testing::TestInfo &test_info)
   {
     logger_log("*** Test %s.%s starting.",
                test_info.test_suite_name(), test_info.name());
   }
 
-  // Called after a failed assertion or a SUCCESS().
   virtual void OnTestPartResult(const ::testing::TestPartResult &test_part_result)
   {
     const char * status = test_part_result.failed() ? "*** Failure" : "Success";
@@ -48,7 +46,6 @@ class TestProgressLogger : public ::testing::EmptyTestEventListener
                test_part_result.summary());
   }
 
-  // Called after a test ends.
   virtual void OnTestEnd(const ::testing::TestInfo &test_info)
   {
     const testing::TestResult * result = test_info.result();
