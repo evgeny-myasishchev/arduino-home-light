@@ -39,6 +39,9 @@ void PushButtonSwitchService::processSignal(int signal, SwitchStatus *switchStat
 }
 
 void PushButtonSwitchService::applyStateChange(SwitchStatus *switchStatus) {
+    switchStatus->stateChanged = false;
+    switchStatus->seenSignalTimes = 0;
+    switchStatus->seenSignalSince = 0;
 }
 
 }

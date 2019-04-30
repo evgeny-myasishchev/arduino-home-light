@@ -90,4 +90,16 @@ TEST_F(SwitchServiceTest, DoesntChangeStateOnLow)
     }
 }
 
+TEST_F(SwitchServiceTest, ApplyChanges)
+{
+    const int seenSignalTimes = test::randomNumber(100, 600);
+    const unsigned int seenSignalSince = test::randomNumber(100, 600);
+    switch_service::SwitchStatus status(HIGH, true, seenSignalTimes, seenSignalSince);
+    svc->applyStateChange(&status);
+    EXPECT_FALSE(status.stateChanged) << "Should have reset changed flag";
+    EXPECT_EQ(status.currentState, HIGH) << "Should not have change current state";
+    EXPECT_EQ(status.seenSignalTimes, 0) << "Should reset seen times";
+    EXPECT_EQ(status.seenSignalSince, 0) << "Should reset first time seen signal";
+}
+
 } // namespace
