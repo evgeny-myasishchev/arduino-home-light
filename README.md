@@ -1,5 +1,13 @@
 # Home light controller
 
+# Dev
+
+Make sure platformio is installed. Install dependencies:
+
+```
+pio run -e platform-test -t size
+```
+
 ## Unit tests
 
 ### Running universal tests
