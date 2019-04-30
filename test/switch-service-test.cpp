@@ -71,43 +71,23 @@ TEST_F(SwitchServiceTest, ChangeStateHighWhenSeenSignalEnough)
     EXPECT_EQ(status.seenSignalSince, nowMillis) << "Should remember first time seen signal";
 }
 
-// TEST(switchService, DoesntChangeStateOnLow)
-// {
-//     unsigned int nowMillis = test::randomNumber(100, 600);
-//     int minSignalDurationMs = test::randomNumber(100, 600);
-//     int minIterations = test::randomNumber(5, 10);
-//     logger_log("minIterations: %d", minIterations);
+TEST_F(SwitchServiceTest, DoesntChangeStateOnLow)
+{
+    const int seenSignalTimes = test::randomNumber(100, 600);
+    const unsigned int seenSignalSince = test::randomNumber(100, 600);
+    switch_service::SwitchStatus status(HIGH, false, seenSignalTimes, seenSignalSince);
 
-//     FakeTimers * fakeTimers = new FakeTimers(nowMillis);
+    int durationIncrease = minSignalDurationMs / minIterations;
 
-//     switch_service::SwitchServiceConfig cfg = switch_service::SwitchServiceConfig(
-//         minSignalDurationMs,
-//         minIterations,
-//         fakeTimers);
-//     switch_service::SwitchService *svc = new switch_service::PushButtonSwitchService(cfg);
-
-//     const int currentState = HIGH;
-//     const int seenSignalTimes = test::randomNumber(10, 100);
-//     const unsigned int seenSignalSince = test::randomNumber(nowMillis, nowMillis * 10);
-
-//     switch_service::SwitchStatus status = switch_service::SwitchStatus(
-//         currentState,
-//         false,
-//         seenSignalTimes,
-//         seenSignalSince
-//     );
-
-//     int durationIncrease = minSignalDurationMs / minIterations;
-
-//     for (int i = 0; i < minIterations * 2; i++)
-//     {
-//         svc->processSignal(LOW, &status);
-//         EXPECT_FALSE(status.stateChanged) << "Should not have changed state";
-//         EXPECT_EQ(status.currentState, currentState) << "Should not have toggled state";
-//         EXPECT_EQ(status.seenSignalSince, seenSignalSince) << "Should not change seen since";
-//         EXPECT_EQ(status.seenSignalTimes, seenSignalTimes) << "Should not increment seen times";
-//         fakeTimers->advance(durationIncrease);
-//     }
-// }
+    for (int i = 0; i < minIterations * 3; i++)
+    {
+        svc->processSignal(LOW, &status);
+        EXPECT_FALSE(status.stateChanged) << "Should not have changed state";
+        EXPECT_EQ(status.currentState, HIGH) << "Should not have toggled state";
+        EXPECT_EQ(status.seenSignalTimes, seenSignalTimes) << "Should increment seen times";
+        EXPECT_EQ(status.seenSignalSince, seenSignalSince) << "Should remember first time seen signal";
+        fakeTimers.advance(durationIncrease);
+    }
+}
 
 } // namespace
