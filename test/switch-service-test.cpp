@@ -71,6 +71,32 @@ TEST_F(SwitchServiceTest, ChangeStateHighWhenSeenSignalEnough)
     EXPECT_EQ(status.seenSignalSince, nowMillis) << "Should remember first time seen signal";
 }
 
+TEST_F(SwitchServiceTest, ChangeStateLowWhenSeenSignalEnough)
+{
+    switch_service::SwitchStatus status(HIGH, false, 0, 0);
+
+    int durationIncrease = minSignalDurationMs / minIterations;
+
+    for (int i = 0; i < minIterations; i++)
+    {
+        svc->processSignal(HIGH, &status);
+        EXPECT_FALSE(status.stateChanged) << "Should not have changed state";
+        EXPECT_EQ(status.currentState, HIGH) << "Should not have toggled state";
+        EXPECT_EQ(status.seenSignalSince, nowMillis) << "Should remember first time seen signal";
+        EXPECT_EQ(status.seenSignalTimes, i + 1) << "Should increment seen times";
+        fakeTimers.advance(durationIncrease);
+    }
+
+    logger_log("TEST: Completed minIterations stage");
+
+    fakeTimers.advance(durationIncrease);
+    svc->processSignal(HIGH, &status);
+    EXPECT_TRUE(status.stateChanged) << "Should have changed state";
+    EXPECT_EQ(status.currentState, LOW) << "Should have HIGH value";
+    EXPECT_EQ(status.seenSignalTimes, minIterations + 1) << "Should increment seen times";
+    EXPECT_EQ(status.seenSignalSince, nowMillis) << "Should remember first time seen signal";
+}
+
 TEST_F(SwitchServiceTest, DoesntChangeStateOnLow)
 {
     const int seenSignalTimes = test::randomNumber(100, 600);
