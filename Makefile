@@ -42,6 +42,9 @@ $(APP_DIR)/$(TARGET): $(OBJECTS)
 
 build-test: $(APP_DIR)/$(TARGET)
 
+test: build-test
+	$(APP_DIR)/$(TARGET)
+
 .PHONY: all build clean debug release
 
 build:
