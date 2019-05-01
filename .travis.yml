@@ -11,5 +11,5 @@ install:
     - pip install -U platformio
 
 script:
-    - pio run -e platform-test -t size
+    - pio run -e universal
     - make test

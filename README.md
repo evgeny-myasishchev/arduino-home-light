@@ -2,15 +2,16 @@
 
 # Dev
 
-Make sure platformio is installed. Install dependencies:
-
-```
-pio run -e platform-test -t size
-```
+Make sure platformio is installed.
 
 ## Unit tests
 
 ### Running universal tests
+
+Install native deps:
+```
+pio run -e universal
+```
 
 Make sure to have reflex installed
 

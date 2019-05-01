@@ -1,5 +1,5 @@
 #include <ArduinoUnit.h>
-#include <ArduinoLog.h>
+#include "logger.h"
 
 void setup()
 {
@@ -8,7 +8,7 @@ void setup()
 
   Serial.begin(9600);
   while(!Serial) {} // Portability for Leonardo/Micro
-  Log.begin (LOG_LEVEL_FATAL, &Serial);
+  logger_setup(&Serial);
 
   // Test::exclude("*");
   // Test::include("dev_*");

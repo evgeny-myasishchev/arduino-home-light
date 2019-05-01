@@ -62,7 +62,6 @@ test(logger_log)
 
 test(logger_macros)
 {
-    logger_setup(&Serial);
     logger_log("String with params %s, %s", "param1", "param2");
     Serial.println("Expected output - String with params: param1, param2");
     Serial.println("Please compare manually");
