@@ -1,6 +1,20 @@
 #ifndef SWITCHES_H
 #define SWITCHES_H
 
+#include <vector>
+
+class SignalReader
+{
+public:
+    virtual void read(int channel) = 0;
+};
+
+class SignalWriter
+{
+public:
+    virtual void write(int address, int state) = 0;
+};
+
 struct SwitchStatus
 {
 public:
@@ -28,7 +42,7 @@ public:
 struct SwitchRoute 
 {
 public:
-    // int outputAddresses[];
+    std::vector<int> outputAddresses = {};
     SwitchStatus status;
 };
 
