@@ -25,4 +25,11 @@ public:
     }
 };
 
+struct SwitchRoute 
+{
+public:
+    // int outputAddresses[];
+    SwitchStatus status;
+};
+
 #endif
