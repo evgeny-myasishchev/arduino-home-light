@@ -1,8 +1,6 @@
 #ifndef SWITCHES_H
 #define SWITCHES_H
 
-#include <vector>
-
 class SignalReader
 {
 public:
@@ -42,7 +40,6 @@ public:
 struct SwitchRoute 
 {
 public:
-    std::vector<int> outputAddresses = {};
     SwitchStatus status;
 };
 
