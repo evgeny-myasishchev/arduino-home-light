@@ -26,7 +26,7 @@ public:
 template <typename T>
 vector<T>::vector()
 {
-  _values = NULL;
+  _values = __null;
   _size = 0;
 }
 
