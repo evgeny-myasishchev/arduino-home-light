@@ -1,7 +1,7 @@
 #include <switch-service.h>
 #include <arduino-compat.h>
 
-namespace switch_service {
+namespace switches {
 
 SwitchService::SwitchService(SwitchServiceConfig cfg) {
     this->cfg = cfg;

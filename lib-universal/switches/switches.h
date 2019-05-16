@@ -1,6 +1,9 @@
 #ifndef SWITCHES_H
 #define SWITCHES_H
 
+namespace switches
+{
+
 class SignalReader
 {
 public:
@@ -42,5 +45,7 @@ struct SwitchRoute
 public:
     SwitchStatus status;
 };
+
+}
 
 #endif

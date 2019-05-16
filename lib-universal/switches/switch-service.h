@@ -5,7 +5,7 @@
 #include <logger.h>
 #include <switches.h>
 
-namespace switch_service
+namespace switches
 {
 
 #ifdef SWITCH_SERVICE_VERBOSE

@@ -19,8 +19,8 @@ protected:
     int minIterations;
 
     FakeTimers fakeTimers;
-    switch_service::SwitchServiceConfig cfg;
-    switch_service::SwitchService *svc;
+    switches::SwitchServiceConfig cfg;
+    switches::SwitchService *svc;
 
     void SetUp() override
     {
@@ -36,18 +36,18 @@ protected:
 
         fakeTimers.setMillis(this->nowMillis);
 
-        this->cfg = switch_service::SwitchServiceConfig(
+        this->cfg = switches::SwitchServiceConfig(
             minSignalDurationMs,
             minIterations,
             &fakeTimers);
 
-        this->svc = new switch_service::PushButtonSwitchService(cfg);
+        this->svc = new switches::PushButtonSwitchService(cfg);
     }
 };
 
 TEST_F(SwitchServiceTest, ChangeStateHighWhenSeenSignalEnough)
 {
-    switch_service::SwitchStatus status;
+    switches::SwitchStatus status;
 
     int durationIncrease = minSignalDurationMs / minIterations;
 
@@ -73,7 +73,7 @@ TEST_F(SwitchServiceTest, ChangeStateHighWhenSeenSignalEnough)
 
 TEST_F(SwitchServiceTest, ChangeStateLowWhenSeenSignalEnough)
 {
-    switch_service::SwitchStatus status(HIGH, false, 0, 0);
+    switches::SwitchStatus status(HIGH, false, 0, 0);
 
     int durationIncrease = minSignalDurationMs / minIterations;
 
@@ -101,7 +101,7 @@ TEST_F(SwitchServiceTest, DoesntChangeStateOnLow)
 {
     const int seenSignalTimes = test::randomNumber(100, 600);
     const unsigned int seenSignalSince = test::randomNumber(100, 600);
-    switch_service::SwitchStatus status(HIGH, false, seenSignalTimes, seenSignalSince);
+    switches::SwitchStatus status(HIGH, false, seenSignalTimes, seenSignalSince);
 
     int durationIncrease = minSignalDurationMs / minIterations;
 
@@ -120,7 +120,7 @@ TEST_F(SwitchServiceTest, ApplyChanges)
 {
     const int seenSignalTimes = test::randomNumber(100, 600);
     const unsigned int seenSignalSince = test::randomNumber(100, 600);
-    switch_service::SwitchStatus status(HIGH, true, seenSignalTimes, seenSignalSince);
+    switches::SwitchStatus status(HIGH, true, seenSignalTimes, seenSignalSince);
     svc->applyStateChange(&status);
     EXPECT_FALSE(status.stateChanged) << "Should have reset changed flag";
     EXPECT_EQ(status.currentState, HIGH) << "Should not have change current state";
