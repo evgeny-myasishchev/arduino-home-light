@@ -1,4 +1,5 @@
 #include "gtest/gtest.h"
+#include "gmock/gmock.h"
 #include <iostream>
 #include <fstream>
 #include "logger.h"
@@ -63,6 +64,7 @@ int main(int argc, char **argv)
 {
   std::srand(std::time(nullptr));
   ::testing::InitGoogleTest(&argc, argv);
+  ::testing::InitGoogleMock(&argc, argv);
   std::ofstream testLogOutput("test.log", std::ofstream::out | std::ofstream::trunc);
   logger::setupLoggingSystem(new FileOutput(&testLogOutput));
 

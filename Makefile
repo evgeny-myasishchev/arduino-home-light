@@ -22,10 +22,11 @@ CPP_SRC := \
 	$(wildcard test/**/*.cpp) \
 	$(wildcard lib-universal/*/*.cpp)
 CC_SRC := \
-	$(wildcard $(PIO_USER_LIBS_HOME)/googletest_ID5976/googletest/src/*.cc)
+	$(wildcard $(PIO_USER_LIBS_HOME)/googletest_ID5976/*/src/*.cc)
 OBJECTS := $(CPP_SRC:%.cpp=$(OBJ_DIR)/%.o) $(CC_SRC:%.cc=$(OBJ_DIR)/%.o)
 
 INCLUDE += \
+	-I$(PIO_USER_LIBS_HOME)/googletest_ID5976/googlemock/include/ \
 	-I$(PIO_USER_LIBS_HOME)/googletest_ID5976/googletest/include/ \
 	-I$(PIO_USER_LIBS_HOME)/googletest_ID5976/googletest/
 
