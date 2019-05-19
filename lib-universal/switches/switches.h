@@ -1,6 +1,8 @@
 #ifndef SWITCHES_H
 #define SWITCHES_H
 
+#include <pstd.h>
+
 namespace switches
 {
 
@@ -43,6 +45,7 @@ public:
 struct SwitchRoute 
 {
 public:
+    pstd::vector<int> targetAddresses;
     SwitchStatus status;
 };
 
