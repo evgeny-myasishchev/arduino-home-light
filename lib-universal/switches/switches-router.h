@@ -10,9 +10,18 @@ namespace switches
 
 struct SwitchRouterServices
 {
+public:
     SignalReader * reader;
     SignalWriter * writer;
     SwitchService * switchSvc;
+
+    SwitchRouterServices() {}
+
+    SwitchRouterServices(SignalReader * reader, SignalWriter * writer, SwitchService * svc) {
+        this->reader = reader;
+        this->writer = writer;
+        this->switchSvc = svc;
+    }
 };
 
 class SwitchesRouter

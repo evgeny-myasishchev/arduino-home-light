@@ -47,6 +47,12 @@ struct SwitchRoute
 public:
     pstd::vector<int> targetAddresses;
     SwitchStatus status;
+
+    SwitchRoute() {}
+
+    void withTargetAddresses(pstd::vector<int> t) {
+        this->targetAddresses = t;
+    }
 };
 
 }
