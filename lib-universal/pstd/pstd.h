@@ -3,6 +3,8 @@
 #ifndef PSTD_H
 #define PSTD_H
 
+#include <stdarg.h>
+
 namespace pstd
 {
 
