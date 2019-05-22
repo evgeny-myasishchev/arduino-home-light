@@ -57,9 +57,9 @@ TEST_F(SwitchesRouterTest, processRoutesNoSignal)
 
     const int routesNum = 3;
     SwitchRoute routeValues[routesNum] = {
-        *SwitchRoute(&status1).withTargetAddresses(pstd::vector<int>(2, 1, 2)),
-        *SwitchRoute(&status2).withTargetAddresses(pstd::vector<int>(2, 5, 7)),
-        *SwitchRoute(&status3).withTargetAddresses(pstd::vector<int>(2, 7, 10))
+        SwitchRoute(&status1),
+        SwitchRoute(&status2),
+        SwitchRoute(&status3)
     };
 
     pstd::vector<SwitchRoute> routes(routeValues);
@@ -83,9 +83,9 @@ TEST_F(SwitchesRouterTest, processRoutesSeenSignalNoChanges)
 
     const int routesNum = 3;
     SwitchRoute routeValues[routesNum] = {
-        *SwitchRoute(&status1).withTargetAddresses(pstd::vector<int>(2, 1, 2)),
-        *SwitchRoute(&status2).withTargetAddresses(pstd::vector<int>(2, 5, 7)),
-        *SwitchRoute(&status3).withTargetAddresses(pstd::vector<int>(2, 7, 10))
+        SwitchRoute(&status1),
+        SwitchRoute(&status2),
+        SwitchRoute(&status3)
     };
 
     pstd::vector<SwitchRoute> routes(routeValues);
