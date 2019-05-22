@@ -27,9 +27,10 @@ public:
 class SwitchesRouter
 {
 private:
-    /* data */
+    pstd::vector<SwitchRoute> routes;
+    SwitchRouterServices services;
 public:
-    SwitchesRouter(pstd::vector<SwitchRoute> route, SwitchRouterServices services);
+    SwitchesRouter(pstd::vector<SwitchRoute> routes, SwitchRouterServices services);
 
     void setup();
     void processRoutes();

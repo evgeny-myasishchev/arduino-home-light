@@ -16,7 +16,7 @@ using namespace testing;
 class MockSignalReader : public SignalReader
 {
 public:
-    MOCK_METHOD1(read, void(int channel));
+    MOCK_METHOD1(read, int(int channel));
 };
 
 class MockSignalWriter : public SignalWriter
@@ -49,25 +49,53 @@ protected:
     }
 };
 
-void foo(std::initializer_list<int>& l) {
-
-}
-
-TEST_F(SwitchesRouterTest, processRoutes)
+TEST_F(SwitchesRouterTest, processRoutesNoSignal)
 {
-    // SwitchRoute routeValues[10] = {
-    //     SwitchRoute().withTargetAddresses(pstd::vector<int>(int[2]{ 1, 2 }))
-    // };
-    
-    // pstd::vector<SwitchRoute> routes({SwitchRoute()});
+    SwitchStatus status1;
+    SwitchStatus status2;
+    SwitchStatus status3;
 
-    for (size_t i = 0; i < 2; i++)
-    {
-        EXPECT_CALL(signalReader, read(i));
-    }
-    
-    signalReader.read(0);
-    signalReader.read(1);
+    const int routesNum = 3;
+    SwitchRoute routeValues[routesNum] = {
+        *SwitchRoute(&status1).withTargetAddresses(pstd::vector<int>(2, 1, 2)),
+        *SwitchRoute(&status2).withTargetAddresses(pstd::vector<int>(2, 5, 7)),
+        *SwitchRoute(&status3).withTargetAddresses(pstd::vector<int>(2, 7, 10))
+    };
+
+    pstd::vector<SwitchRoute> routes(routeValues);
+    SwitchesRouter router(routes, services);
+
+    EXPECT_CALL(signalReader, read(0)).WillOnce(Return(0));
+    EXPECT_CALL(switchService, processSignal(0, &status1));
+    EXPECT_CALL(signalReader, read(1));
+    EXPECT_CALL(switchService, processSignal(0, &status2));
+    EXPECT_CALL(signalReader, read(2)).WillOnce(Return(0));;
+    EXPECT_CALL(switchService, processSignal(0, &status3));
+
+    router.processRoutes();
 }
+
+// TEST_F(SwitchesRouterTest, processRoutesSeenSignal)
+// {
+//     SwitchStatus status1;
+//     SwitchStatus status2;
+//     SwitchStatus status3;
+
+//     const int routesNum = 3;
+//     SwitchRoute routeValues[routesNum] = {
+//         *SwitchRoute(&status1).withTargetAddresses(pstd::vector<int>(2, 1, 2)),
+//         *SwitchRoute(&status2).withTargetAddresses(pstd::vector<int>(2, 5, 7)),
+//         *SwitchRoute(&status3).withTargetAddresses(pstd::vector<int>(2, 7, 10))
+//     };
+
+//     pstd::vector<SwitchRoute> routes(routeValues);
+//     SwitchesRouter router(routes, services);
+
+//     EXPECT_CALL(signalReader, read(0));
+//     EXPECT_CALL(signalReader, read(1)).WillOnce(Return(1));
+//     EXPECT_CALL(signalReader, read(2));
+
+//     router.processRoutes();
+// }
 
 } // namespace

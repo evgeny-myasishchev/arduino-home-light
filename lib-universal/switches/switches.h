@@ -9,7 +9,7 @@ namespace switches
 class SignalReader
 {
 public:
-    virtual void read(int channel) = 0;
+    virtual int read(int channel) = 0;
 };
 
 class SignalWriter
@@ -46,12 +46,17 @@ struct SwitchRoute
 {
 public:
     pstd::vector<int> targetAddresses;
-    SwitchStatus status;
+    SwitchStatus *status;
 
     SwitchRoute() {}
 
-    void withTargetAddresses(pstd::vector<int> t) {
+    SwitchRoute(SwitchStatus *s) {
+        status = s;
+    }
+
+    SwitchRoute* withTargetAddresses(pstd::vector<int> t) {
         this->targetAddresses = t;
+        return this;
     }
 };
 
