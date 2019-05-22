@@ -39,12 +39,17 @@ class TestProgressLogger : public ::testing::EmptyTestEventListener
 
   virtual void OnTestPartResult(const ::testing::TestPartResult &test_part_result)
   {
-    const char * status = test_part_result.failed() ? "*** Failure" : "Success";
-    logger_log("%s in %s:%d\n%s\n",
-               status,
-               test_part_result.file_name(),
-               test_part_result.line_number(),
-               test_part_result.summary());
+    // const char * status = test_part_result.failed() ? "*** Failure" : "Success";
+    // auto file_name = test_part_result.file_name();
+    // if(file_name == nullptr)
+    // {
+    //   file_name = "unknown file";
+    // }
+    // logger_log("%s in %s:%d\n%s\n",
+    //            status,
+    //            file_name,
+    //            test_part_result.line_number(),
+    //            test_part_result.summary());
   }
 
   virtual void OnTestEnd(const ::testing::TestInfo &test_info)
