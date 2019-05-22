@@ -75,27 +75,30 @@ TEST_F(SwitchesRouterTest, processRoutesNoSignal)
     router.processRoutes();
 }
 
-// TEST_F(SwitchesRouterTest, processRoutesSeenSignal)
-// {
-//     SwitchStatus status1;
-//     SwitchStatus status2;
-//     SwitchStatus status3;
+TEST_F(SwitchesRouterTest, processRoutesSeenSignalNoChanges)
+{
+    SwitchStatus status1;
+    SwitchStatus status2;
+    SwitchStatus status3;
 
-//     const int routesNum = 3;
-//     SwitchRoute routeValues[routesNum] = {
-//         *SwitchRoute(&status1).withTargetAddresses(pstd::vector<int>(2, 1, 2)),
-//         *SwitchRoute(&status2).withTargetAddresses(pstd::vector<int>(2, 5, 7)),
-//         *SwitchRoute(&status3).withTargetAddresses(pstd::vector<int>(2, 7, 10))
-//     };
+    const int routesNum = 3;
+    SwitchRoute routeValues[routesNum] = {
+        *SwitchRoute(&status1).withTargetAddresses(pstd::vector<int>(2, 1, 2)),
+        *SwitchRoute(&status2).withTargetAddresses(pstd::vector<int>(2, 5, 7)),
+        *SwitchRoute(&status3).withTargetAddresses(pstd::vector<int>(2, 7, 10))
+    };
 
-//     pstd::vector<SwitchRoute> routes(routeValues);
-//     SwitchesRouter router(routes, services);
+    pstd::vector<SwitchRoute> routes(routeValues);
+    SwitchesRouter router(routes, services);
 
-//     EXPECT_CALL(signalReader, read(0));
-//     EXPECT_CALL(signalReader, read(1)).WillOnce(Return(1));
-//     EXPECT_CALL(signalReader, read(2));
+    EXPECT_CALL(signalReader, read(0)).WillOnce(Return(1));
+    EXPECT_CALL(switchService, processSignal(1, &status1));
+    EXPECT_CALL(signalReader, read(1));
+    EXPECT_CALL(switchService, processSignal(0, &status2));
+    EXPECT_CALL(signalReader, read(2)).WillOnce(Return(1));;
+    EXPECT_CALL(switchService, processSignal(1, &status3));
 
-//     router.processRoutes();
-// }
+    router.processRoutes();
+}
 
 } // namespace
