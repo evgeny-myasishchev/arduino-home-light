@@ -50,13 +50,9 @@ public:
 
     SwitchRoute() {}
 
-    SwitchRoute(SwitchStatus *s) {
+    SwitchRoute(SwitchStatus *s, pstd::vector<int> targetAddresses) : SwitchRoute() {
         status = s;
-    }
-
-    SwitchRoute* withTargetAddresses(pstd::vector<int> t) {
-        this->targetAddresses = t;
-        return this;
+        this->targetAddresses = targetAddresses;
     }
 };
 
