@@ -45,20 +45,6 @@ vector<T>::vector(T (&values)[SIZE])
 }
 
 template <typename T>
-vector<T>::vector(unsigned int size, ...)
-{
-    va_list args;
-    va_start(args,size);
-    _size = size;
-    T values[size];
-    for(unsigned int i = 0; i < size; i++) {
-      values[i] = va_arg(args,T);
-    }
-    va_end(args);
-    _values = values;
-}
-
-template <typename T>
 const T & vector<T>::operator[](unsigned int index) const
 {
   return _values[index];
