@@ -2,6 +2,11 @@
 #define SWITCHES_H
 
 #include <pstd.h>
+#include <arduino-compat.h>
+
+#ifdef ARDUINO
+#include "CD74HC4067.h"
+#endif
 
 namespace switches
 {
@@ -17,6 +22,51 @@ class SignalWriter
 public:
     virtual void write(int address, int state) = 0;
 };
+
+#ifdef ARDUINO
+
+struct CD74HC4067Config
+{
+public:
+    int s0;
+    int s1;
+    int s2;
+    int s3;
+    int sig;
+    int en;
+
+    CD74HC4067Config(){}
+
+    CD74HC4067Config(
+        int s0,
+        int s1,
+        int s2,
+        int s3,
+        int sig,
+        int en)
+    {
+        this->s0 = s0;
+        this->s1 = s1;
+        this->s2 = s2;
+        this->s3 = s3;
+        this->sig = sig;
+        this->en = en;
+    }
+};
+
+class CD74HC4067SignalReader : public SignalReader
+{
+private:
+    CD74HC4067Config cfg;
+    CD74HC4067 *mux;
+
+public:
+    CD74HC4067SignalReader(CD74HC4067Config cfg);
+    void init();
+    int read(int channel);
+};
+
+#endif
 
 struct SwitchStatus
 {
@@ -42,7 +92,7 @@ public:
     }
 };
 
-struct SwitchRoute 
+struct SwitchRoute
 {
 public:
     pstd::vector<int> targetAddresses;
@@ -50,12 +100,13 @@ public:
 
     SwitchRoute() {}
 
-    SwitchRoute(SwitchStatus *s, pstd::vector<int> targetAddresses) : SwitchRoute() {
+    SwitchRoute(SwitchStatus *s, pstd::vector<int> targetAddresses) : SwitchRoute()
+    {
         status = s;
         this->targetAddresses = targetAddresses;
     }
 };
 
-}
+} // namespace switches
 
 #endif

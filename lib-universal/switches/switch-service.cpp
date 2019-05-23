@@ -1,5 +1,4 @@
 #include <switch-service.h>
-#include <arduino-compat.h>
 
 namespace switches {
 
