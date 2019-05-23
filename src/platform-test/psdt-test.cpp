@@ -12,13 +12,4 @@ test(psdt_vector)
     {
         assertEqual(values[i], v[i]);
     }
-
-    // TODO: Failing
-    // pstd::vector<int> v2(4, 1, 2, 3, 4);
-    // assertEqual(4, v2.size());
-
-    // for (int i = 0; i < v2.size(); i++)
-    // {
-    //     assertEqual(values[i], v2[i]);
-    // }
 }
