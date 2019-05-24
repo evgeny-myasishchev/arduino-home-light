@@ -1,8 +1,6 @@
 #ifndef SwitchService_h
 #define SwitchService_h
 
-#include <Timers.h>
-#include <logger.h>
 #include <switches.h>
 
 namespace switches

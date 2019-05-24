@@ -3,6 +3,8 @@
 
 #include <pstd.h>
 #include <arduino-compat.h>
+#include <Timers.h>
+#include <logger.h>
 
 #ifdef ARDUINO
 #include "CD74HC4067.h"
@@ -64,6 +66,18 @@ public:
     CD74HC4067SignalReader(CD74HC4067Config cfg);
     void init();
     int read(int channel);
+};
+
+class CD74HC4067SignalWriter : public SignalWriter
+{
+private:
+    CD74HC4067Config cfg;
+    CD74HC4067 *mux;
+
+public:
+    CD74HC4067SignalWriter(CD74HC4067Config cfg);
+    void init();
+    void write(int address, int state);
 };
 
 #endif
