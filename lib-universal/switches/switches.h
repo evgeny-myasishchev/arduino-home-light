@@ -7,7 +7,7 @@
 #include <logger.h>
 
 #ifdef ARDUINO
-#include "CD74HC4067.h"
+#include <PCF8574.h>
 #endif
 
 namespace switches
@@ -16,6 +16,7 @@ namespace switches
 class SignalReader
 {
 public:
+    // TODO: Refactor to use uint8_t
     virtual int read(int channel) = 0;
 };
 
@@ -27,56 +28,25 @@ public:
 
 #ifdef ARDUINO
 
-struct CD74HC4067Config
-{
-public:
-    int s0;
-    int s1;
-    int s2;
-    int s3;
-    int sig;
-    int en;
-
-    CD74HC4067Config(){}
-
-    CD74HC4067Config(
-        int s0,
-        int s1,
-        int s2,
-        int s3,
-        int sig,
-        int en)
-    {
-        this->s0 = s0;
-        this->s1 = s1;
-        this->s2 = s2;
-        this->s3 = s3;
-        this->sig = sig;
-        this->en = en;
-    }
-};
-
-class CD74HC4067SignalReader : public SignalReader
+class PCF8574IO : public SignalReader, public SignalWriter
 {
 private:
-    CD74HC4067Config cfg;
-    CD74HC4067 *mux;
+    uint8_t readerStartAddr;
+    uint8_t readerBoardsNum;
+    uint8_t writerStartAddr;
+    uint8_t writerBoardsNum;
+    PCF8574 *readerBoards;
+    PCF8574 *writerBoards;
 
 public:
-    CD74HC4067SignalReader(CD74HC4067Config cfg);
+    PCF8574IO(
+        const uint8_t readerStartAddr,
+        const uint8_t readerBoardsNum,
+        const uint8_t writerStartAddr,
+        const uint8_t writerBoardsNum);
+
     void init();
     int read(int channel);
-};
-
-class CD74HC4067SignalWriter : public SignalWriter
-{
-private:
-    CD74HC4067Config cfg;
-    CD74HC4067 *mux;
-
-public:
-    CD74HC4067SignalWriter(CD74HC4067Config cfg);
-    void init();
     void write(int address, int state);
 };
 

@@ -5,32 +5,29 @@
 namespace switches
 {
 
-CD74HC4067SignalReader::CD74HC4067SignalReader(CD74HC4067Config cfg)
+PCF8574IO::PCF8574IO(
+    const uint8_t readerStartAddr,
+    const uint8_t readerBoardsNum,
+    const uint8_t writerStartAddr,
+    const uint8_t writerBoardsNum
+    )
 {
-    this->cfg = cfg;
-    this->mux = new CD74HC4067(cfg.s0, cfg.s1, cfg.s2, cfg.s3);
+    this->readerStartAddr = readerStartAddr;
+    this->writerStartAddr = writerStartAddr;
 }
 
-void CD74HC4067SignalReader::init()
+void PCF8574IO::init()
 {
-    pinMode(cfg.s0, OUTPUT);
-    pinMode(cfg.s1, OUTPUT);
-    pinMode(cfg.s2, OUTPUT);
-    pinMode(cfg.s3, OUTPUT);
-    digitalWrite(cfg.s0, LOW);
-    digitalWrite(cfg.s1, LOW);
-    digitalWrite(cfg.s2, LOW);
-    digitalWrite(cfg.s3, LOW);
-
-    pinMode(cfg.en, OUTPUT);
-    pinMode(cfg.sig, INPUT_PULLUP);
-    digitalWrite(cfg.en, LOW);
 }
 
-int CD74HC4067SignalReader::read(int channel)
+int PCF8574IO::read(int channel)
 {
-    mux->channel(channel);
-    return digitalRead(cfg.sig);
+    const uint8_t boardNum = channel / 8;
+    const uint8_t pinNumber = channel % 8;
+}
+
+void PCF8574IO::write(int address, int state)
+{
 }
 
 } // namespace switches
