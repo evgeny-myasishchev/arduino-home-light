@@ -40,8 +40,12 @@ int PCF8574IO::read(int channel)
     const uint8_t boardNum = channel / 8;
     const uint8_t pinNumber = channel % 8;
     // TODO: Check and investigate overflow behavior
-    auto board = this->readerBoards[boardNum];
-    return board->read(pinNumber);
+    const auto board = this->readerBoards[boardNum];
+
+    // Reversing since default is HIGH and relays are HIGH closed
+    // But other logic depends on LOW
+    const auto signal = board->read(pinNumber);
+    return signal == HIGH ? LOW : HIGH;
 }
 
 void PCF8574IO::write(int address, int state)
@@ -50,7 +54,12 @@ void PCF8574IO::write(int address, int state)
     const uint8_t pinNumber = address % 8;
     // TODO: Check and investigate overflow behavior
     auto board = this->writerBoards[boardNum];
-    board->write(pinNumber, state);
+
+    // Reversing since default is HIGH and relays are HIGH closed
+    // But other logic depends on LOW
+    const auto reversedState = state == HIGH ? LOW : HIGH;
+
+    board->write(pinNumber, reversedState);
 }
 
 } // namespace switches
