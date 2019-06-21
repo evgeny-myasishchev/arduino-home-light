@@ -10,9 +10,9 @@ SwitchesRouter *router;
 
 SwitchRoute createRoute(int targetAddress)
 {
-    int route1Targets[] = {0};
-    SwitchRoute route1(new SwitchStatus(), pstd::vector<int>(route1Targets));
-    return route1;
+    int route1Targets[] = {targetAddress};
+    SwitchRoute route(new SwitchStatus(), pstd::vector<int>(route1Targets));
+    return route;
 }
 
 void setup()
@@ -45,5 +45,5 @@ void setup()
 
 void loop()
 {
-    // router->processRoutes();
+    router->processRoutes();
 }
