@@ -11,20 +11,23 @@ SwitchesRouter::SwitchesRouter(pstd::vector<SwitchRoute> routes, SwitchRouterSer
 
 void SwitchesRouter::processRoutes()
 {
-    logger_log("Procssing routes");
     for (int i = 0; i < routes.size(); i++)
     {
         auto route = routes[i];
         auto status = route.status;
         const int signal = services.reader->read(i);
+        if (signal == HIGH)
+        {
+            logger_log("Seeing signal for %d route", i);
+        }
         services.switchSvc->processSignal(signal, status);
         if (status->stateChanged)
         {
             logger_log("Route %d status changed to %d", i, status->currentState);
-            for (int addrNum = 0; addrNum < route.targetAddresses.size(); addrNum++)
+            for (unsigned int addrNum = 0; addrNum < route.targetAddresses.size(); addrNum++)
             {
-                auto address = route.targetAddresses[addrNum];
-                logger_log("Writting %d state to %d address", status->currentState, address);
+                const auto address = route.targetAddresses[addrNum];
+                logger_log("Writting %d state to %d[%d] address", status->currentState, address, addrNum);
                 services.writer->write(address, status->currentState);
             }
             services.switchSvc->applyStateChange(status);
