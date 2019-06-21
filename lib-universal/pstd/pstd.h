@@ -22,8 +22,6 @@ public:
     template <unsigned int SIZE>
     vector(T (&array)[SIZE]);
 
-    vector(unsigned int size, ...);
-
     const T & operator[](unsigned int index) const;
 
     unsigned int size() const;
