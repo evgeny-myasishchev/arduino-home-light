@@ -22,6 +22,10 @@ public:
     template <unsigned int SIZE>
     vector(T (&array)[SIZE]);
 
+    vector(const vector<T> & v);
+
+    ~vector();
+
     const T & operator[](unsigned int index) const;
 
     unsigned int size() const;
@@ -38,20 +42,41 @@ template <typename T>
 template <unsigned int SIZE>
 vector<T>::vector(T (&values)[SIZE])
 {
-    _values = values;
     _size = SIZE;
+    _values = new T[SIZE];
+    for (unsigned int i = 0; i < SIZE; i++)
+    {
+        _values[i] = values[i];
+    }
+}
+
+template <typename T>
+vector<T>::vector(const vector<T> & v)
+{
+    _size = v.size();
+    _values = new T[_size];
+    for (unsigned int i = 0; i < _size; i++)
+    {
+        _values[i] = v[i];
+    }
 }
 
 template <typename T>
 const T & vector<T>::operator[](unsigned int index) const
 {
-  return _values[index];
+    return _values[index];
 }
 
 template <typename T>
 unsigned int vector<T>::size() const
 {
-  return _size;
+    return _size;
+}
+
+template <typename T>
+vector<T>::~vector()
+{
+    delete[ ] _values;
 }
 
 } // namespace pstd
