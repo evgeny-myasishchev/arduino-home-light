@@ -30,6 +30,20 @@ TEST(vector, copy)
     }
 }
 
+TEST(vector, move)
+{
+    int values[] = {1, 2, 3, 4};
+
+    pstd::vector<int> v;
+    v = pstd::vector<int>(values);
+    ASSERT_EQ(4, v.size());
+
+    for (int i = 0; i < v.size(); i++)
+    {
+        ASSERT_EQ(values[i], v[i]);
+    }
+}
+
 pstd::vector<int> createVector(const int val1, const int val2)
 {
     int values[] = {val1, val2};

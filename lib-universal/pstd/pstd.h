@@ -14,28 +14,41 @@ class vector
 private:
     // T values;
     unsigned int _size;
-    T * _values;
+    T *_values;
+    void copyFrom(const vector<T> &v);
 
-public: 
+public:
     vector();
 
     template <unsigned int SIZE>
     vector(T (&array)[SIZE]);
 
-    vector(const vector<T> & v);
+    vector(const vector<T> &v);
+    vector<T> &operator=(const vector<T> &v);
 
     ~vector();
 
-    const T & operator[](unsigned int index) const;
+    const T &operator[](unsigned int index) const;
 
     unsigned int size() const;
 };
 
 template <typename T>
+void vector<T>::copyFrom(const vector<T> &v)
+{
+    _size = v.size();
+    _values = new T[_size];
+    for (unsigned int i = 0; i < _size; i++)
+    {
+        _values[i] = v[i];
+    }
+}
+
+template <typename T>
 vector<T>::vector()
 {
-  _values = __null;
-  _size = 0;
+    _values = __null;
+    _size = 0;
 }
 
 template <typename T>
@@ -51,18 +64,26 @@ vector<T>::vector(T (&values)[SIZE])
 }
 
 template <typename T>
-vector<T>::vector(const vector<T> & v)
+vector<T>::vector(const vector<T> &v)
 {
-    _size = v.size();
-    _values = new T[_size];
-    for (unsigned int i = 0; i < _size; i++)
-    {
-        _values[i] = v[i];
-    }
+    this->copyFrom(v);
 }
 
 template <typename T>
-const T & vector<T>::operator[](unsigned int index) const
+vector<T> &vector<T>::operator=(const vector<T> &v)
+{
+    // Self-assignment detection
+    if (&v == this)
+        return *this;
+
+    delete _values;
+
+    this->copyFrom(v);
+    return *this;
+}
+
+template <typename T>
+const T &vector<T>::operator[](unsigned int index) const
 {
     return _values[index];
 }
@@ -76,7 +97,7 @@ unsigned int vector<T>::size() const
 template <typename T>
 vector<T>::~vector()
 {
-    delete[ ] _values;
+    delete[] _values;
 }
 
 } // namespace pstd
