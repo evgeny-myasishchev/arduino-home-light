@@ -23,8 +23,12 @@ public:
     template <unsigned int SIZE>
     vector(T (&array)[SIZE]);
 
+    // Copy
     vector(const vector<T> &v);
     vector<T> &operator=(const vector<T> &v);
+
+    // Move
+    vector<T> &operator=(vector<T> &&v);
 
     ~vector();
 
@@ -63,6 +67,7 @@ vector<T>::vector(T (&values)[SIZE])
     }
 }
 
+// Copy
 template <typename T>
 vector<T>::vector(const vector<T> &v)
 {
@@ -79,6 +84,25 @@ vector<T> &vector<T>::operator=(const vector<T> &v)
     delete _values;
 
     this->copyFrom(v);
+    return *this;
+}
+
+// Move
+template <typename T>
+vector<T> &vector<T>::operator=(vector<T> &&v)
+{
+    // Self-assignment detection
+    if (&v == this)
+        return *this;
+
+    delete _values;
+
+    _size = v._size;
+    _values = v._values;
+
+    v._size = 0;
+    v._values = __null;
+
     return *this;
 }
 

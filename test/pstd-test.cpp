@@ -16,23 +16,9 @@ TEST(vector, ops)
     }
 }
 
-TEST(vector, copy)
+TEST(vector, moveAssign)
 {
-    int values[] = {1, 2, 3, 4};
-
-    pstd::vector<int> v(values);
-    const auto copy = v;
-    ASSERT_EQ(4, copy.size());
-
-    for (int i = 0; i < copy.size(); i++)
-    {
-        ASSERT_EQ(values[i], copy[i]);
-    }
-}
-
-TEST(vector, move)
-{
-    int values[] = {1, 2, 3, 4};
+    int values[] = {23, 431, 1421, 55323};
 
     pstd::vector<int> v;
     v = pstd::vector<int>(values);
@@ -47,10 +33,11 @@ TEST(vector, move)
 pstd::vector<int> createVector(const int val1, const int val2)
 {
     int values[] = {val1, val2};
-    return pstd::vector<int>(values);
+    auto v = pstd::vector<int>(values);
+    return v;
 }
 
-TEST(vector, copyExternal)
+TEST(vector, moveCreate)
 {
     pstd::vector<int> v = createVector(12, 432);
     ASSERT_EQ(2, v.size());
@@ -58,25 +45,29 @@ TEST(vector, copyExternal)
     ASSERT_EQ(432, v[1]);
 }
 
-class testClass
+TEST(vector, copyCreate)
 {
-public:
-    pstd::vector<int> values;
+    int values[] = {1, 2, 3, 4};
 
-    testClass(pstd::vector<int> v)
+    pstd::vector<int> v(values);
+    const auto copy = v;
+    ASSERT_EQ(4, copy.size());
+
+    for (int i = 0; i < copy.size(); i++)
     {
-        values = v;
+        ASSERT_EQ(values[i], copy[i]);
     }
-};
+}
 
-TEST(vector, classCtorParam)
+TEST(vector, copyAssign)
 {
     pstd::vector<int> v = createVector(4513, 8502);
-    testClass tc(v);
+    pstd::vector<int> copy;
+    copy = v;
 
-    ASSERT_EQ(2, tc.values.size());
-    ASSERT_EQ(4513, tc.values[0]);
-    ASSERT_EQ(8502, tc.values[1]);
+    ASSERT_EQ(2, copy.size());
+    ASSERT_EQ(4513, copy[0]);
+    ASSERT_EQ(8502, copy[1]);
 }
 
 TEST(vector, empty)
