@@ -16,11 +16,11 @@ struct SwitchServiceConfig
 {
     // Min number of ms a signal should be seen
     // to consider button pressed or switched
-    unsigned int minSignalDurationMs = 200;
+    unsigned int minSignalDurationMs = 50;
 
     // Min number of times we've seen the signal
     // to take it in action
-    int minSignalIterations = 10;
+    int minSignalIterations = 3;
 
     Timers *timers = new Timers();
 
