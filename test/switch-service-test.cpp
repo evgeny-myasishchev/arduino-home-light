@@ -71,6 +71,27 @@ TEST_F(SwitchServiceTest, ChangeStateHighWhenSeenSignalEnough)
     EXPECT_EQ(status.seenSignalSince, nowMillis) << "Should remember first time seen signal";
 }
 
+TEST_F(SwitchServiceTest, DoesntChangeIfContinuingSeeingTheSignal)
+{
+    switches::SwitchStatus status;
+
+    int durationIncrease = minSignalDurationMs / minIterations;
+
+    for (int i = 0; i <= minIterations + 1; i++)
+    {
+        svc->processSignal(HIGH, &status);
+        fakeTimers.advance(durationIncrease);
+    }
+    EXPECT_EQ(status.currentState, HIGH) << "Should have HIGH value";
+
+    for (int i = 0; i < minIterations * 3; i++)
+    {
+        svc->processSignal(HIGH, &status);
+        fakeTimers.advance(durationIncrease);
+        EXPECT_EQ(status.currentState, HIGH) << "Should stay HIGH after change";
+    }
+}
+
 TEST_F(SwitchServiceTest, ChangeStateLowWhenSeenSignalEnough)
 {
     switches::SwitchStatus status(HIGH, false, 0, 0);
@@ -110,22 +131,27 @@ TEST_F(SwitchServiceTest, DoesntChangeStateOnLow)
         svc->processSignal(LOW, &status);
         EXPECT_FALSE(status.stateChanged) << "Should not have changed state";
         EXPECT_EQ(status.currentState, HIGH) << "Should not have toggled state";
-        EXPECT_EQ(status.seenSignalTimes, seenSignalTimes) << "Should increment seen times";
-        EXPECT_EQ(status.seenSignalSince, seenSignalSince) << "Should remember first time seen signal";
         fakeTimers.advance(durationIncrease);
     }
 }
 
-TEST_F(SwitchServiceTest, ApplyChanges)
+TEST_F(SwitchServiceTest, ResetChangeDetectionOnLow)
 {
     const int seenSignalTimes = test::randomNumber(100, 600);
     const unsigned int seenSignalSince = test::randomNumber(100, 600);
     switches::SwitchStatus status(HIGH, true, seenSignalTimes, seenSignalSince);
-    svc->applyStateChange(&status);
-    EXPECT_FALSE(status.stateChanged) << "Should have reset changed flag";
-    EXPECT_EQ(status.currentState, HIGH) << "Should not have change current state";
-    EXPECT_EQ(status.seenSignalTimes, 0) << "Should reset seen times";
-    EXPECT_EQ(status.seenSignalSince, 0) << "Should reset first time seen signal";
+
+    int durationIncrease = minSignalDurationMs / minIterations;
+
+    for (int i = 0; i < minIterations * 3; i++)
+    {
+        svc->processSignal(LOW, &status);
+        EXPECT_FALSE(status.stateChanged) << "Should reset stateChanged flag";
+        EXPECT_EQ(status.currentState, HIGH) << "Should keep currentState";
+        EXPECT_EQ(status.seenSignalTimes, 0) << "Should reset seen signal times";
+        EXPECT_EQ(status.seenSignalSince, 0) << "Should reset seen signal since";
+        fakeTimers.advance(durationIncrease);
+    }
 }
 
 } // namespace

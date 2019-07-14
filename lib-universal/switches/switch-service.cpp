@@ -30,6 +30,12 @@ void PushButtonSwitchService::processSignal(int signal, SwitchStatus *switchStat
 
         const unsigned int signalDuration = now - switchStatus->seenSignalSince;
 
+        if (switchStatus->stateChanged)
+        {
+            service_log("The state got already changed to %d", switchStatus->currentState);
+            return;
+        }
+
         if (switchStatus->seenSignalTimes >= cfg.minSignalIterations &&
             signalDuration >= cfg.minSignalDurationMs)
         {
@@ -39,13 +45,16 @@ void PushButtonSwitchService::processSignal(int signal, SwitchStatus *switchStat
             service_log("State change detected. Signal duration: %d, new state: %d", signalDuration, switchStatus->currentState);
         }
     }
+    else
+    {
+        switchStatus->stateChanged = false;
+        switchStatus->seenSignalTimes = 0;
+        switchStatus->seenSignalSince = 0;
+    }
 }
 
 void PushButtonSwitchService::applyStateChange(SwitchStatus *switchStatus)
 {
-    switchStatus->stateChanged = false;
-    switchStatus->seenSignalTimes = 0;
-    switchStatus->seenSignalSince = 0;
 }
 
 } // namespace switches
