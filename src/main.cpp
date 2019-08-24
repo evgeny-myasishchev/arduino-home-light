@@ -15,12 +15,8 @@ SwitchRoute createRoute(int targetAddress)
     return route;
 }
 
-void setup()
+pstd::vector<SwitchRoute> setupTestRoutes()
 {
-    Serial.begin(9600);
-    while(!Serial) {}
-    logger_setup(&Serial);
-
     SwitchRoute routesArray[] = {
         createRoute(0),
         createRoute(1),
@@ -30,7 +26,18 @@ void setup()
         createRoute(5),
         createRoute(6),
         createRoute(7)};
-    pstd::vector<SwitchRoute> routes(routesArray);
+    return pstd::vector<SwitchRoute>(routesArray);
+}
+
+void setup()
+{
+    Serial.begin(9600);
+    while (!Serial)
+    {
+    }
+    logger_setup(&Serial);
+
+    pstd::vector<SwitchRoute> routes = setupTestRoutes();
 
     router = new SwitchesRouter(
         pstd::vector<SwitchRoute>(routes),
