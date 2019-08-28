@@ -1,8 +1,12 @@
 # Home light controller
 
-# Dev
+## Usage
 
-Make sure platformio is installed.
+Make sure platformio is installed. Upload:
+
+```
+pio run -t upload -e nano
+```
 
 ## Unit tests
 
