@@ -5,13 +5,15 @@
 namespace switches
 {
 
-PCF8574 **setupBoards(const int boardsNum, uint8_t initialAddress)
+PCF8574 **setupBoards(const int boardsNum, uint8_t initialAddress, uint8_t initialState)
 {
     auto readerBoards = new PCF8574 *[boardsNum];
     for (size_t i = 0; i < boardsNum; i++)
     {
-        auto board = new PCF8574(initialAddress++);
-        board->begin();
+        const auto boardAddr = initialAddress++;
+        const auto board = new PCF8574(boardAddr);
+        // logger_log("Setup board %d", boardAddr);
+        board->begin(initialState);
         readerBoards[i] = board;
     }
     return readerBoards;
@@ -31,20 +33,25 @@ PCF8574IO::PCF8574IO(
 
 void PCF8574IO::init()
 {
-    this->readerBoards = setupBoards(this->readerBoardsNum, this->readerStartAddr);
-    this->writerBoards = setupBoards(this->writerBoardsNum, this->writerStartAddr);
+    this->readerBoards = setupBoards(this->readerBoardsNum, this->readerStartAddr, 0xFF);
+    this->writerBoards = setupBoards(this->writerBoardsNum, this->writerStartAddr, 0xFF);
 }
 
 int PCF8574IO::read(int channel)
 {
     const uint8_t boardNum = channel / 8;
     const uint8_t pinNumber = channel % 8;
+
+
     // TODO: Check and investigate overflow behavior
     const auto board = this->readerBoards[boardNum];
 
     // Reversing since default is HIGH and relays are HIGH closed
     // But other logic depends on LOW
     const auto signal = board->read(pinNumber);
+
+    // logger_log("Reading board %d, pin %d, pinVal %d", boardNum, pinNumber, signal);
+
     return signal == HIGH ? LOW : HIGH;
 }
 
