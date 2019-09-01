@@ -63,9 +63,9 @@ TEST_F(SwitchesRouterTest, processRoutesNoSignal)
 
     const int routesNum = 3;
     SwitchRoute routeValues[routesNum] = {
-        SwitchRoute(&status1, pstd::vector<int>()),
-        SwitchRoute(&status2, pstd::vector<int>()),
-        SwitchRoute(&status3, pstd::vector<int>())
+        SwitchRoute(&status1, new pstd::vector<int>()),
+        SwitchRoute(&status2, new pstd::vector<int>()),
+        SwitchRoute(&status3, new pstd::vector<int>())
     };
 
     const auto routes = new pstd::vector<SwitchRoute>(routeValues);
@@ -89,9 +89,9 @@ TEST_F(SwitchesRouterTest, processRoutesSeenSignalNoChanges)
 
     const int routesNum = 3;
     SwitchRoute routeValues[routesNum] = {
-        SwitchRoute(&status1, pstd::vector<int>()),
-        SwitchRoute(&status2, pstd::vector<int>()),
-        SwitchRoute(&status3, pstd::vector<int>())
+        SwitchRoute(&status1, new pstd::vector<int>()),
+        SwitchRoute(&status2, new pstd::vector<int>()),
+        SwitchRoute(&status3, new pstd::vector<int>())
     };
 
     const auto routes = new pstd::vector<SwitchRoute>(routeValues);
@@ -120,9 +120,9 @@ TEST_F(SwitchesRouterTest, processRoutesSeenSignalGotChanges)
 
     const int routesNum = 3;
     SwitchRoute routeValues[routesNum] = {
-        SwitchRoute(&status1, pstd::vector<int>(route1Addr)),
-        SwitchRoute(&status2, pstd::vector<int>(route2Addr)),
-        SwitchRoute(&status3, pstd::vector<int>(route3Addr))
+        SwitchRoute(&status1, new pstd::vector<int>(route1Addr)),
+        SwitchRoute(&status2, new pstd::vector<int>(route2Addr)),
+        SwitchRoute(&status3, new pstd::vector<int>(route3Addr))
     };
 
     const auto routes = new pstd::vector<SwitchRoute>(routeValues);

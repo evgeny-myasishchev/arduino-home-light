@@ -11,7 +11,7 @@ SwitchesRouter *router;
 SwitchRoute createRoute(int targetAddress)
 {
     int route1Targets[] = {targetAddress};
-    SwitchRoute route(new SwitchStatus(), pstd::vector<int>(route1Targets));
+    SwitchRoute route(new SwitchStatus(), new pstd::vector<int>(route1Targets));
     return route;
 }
 
@@ -22,7 +22,7 @@ pstd::vector<SwitchRoute>* setupTestRoutes()
         8, 9, 10, 11, 12, 13, 14, 15,
         16, 17, 18, 19, 20, 21, 22, 23,
     };
-    SwitchRoute allRoute(new SwitchStatus(), pstd::vector<int>(allAddresses));
+    SwitchRoute allRoute(new SwitchStatus(), new pstd::vector<int>(allAddresses));
 
     SwitchRoute routesArray[] = {
         // relay0

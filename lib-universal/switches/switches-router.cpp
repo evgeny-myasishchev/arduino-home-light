@@ -24,9 +24,9 @@ void SwitchesRouter::processRoutes()
         if (status->stateChanged)
         {
             logger_log("Route %d status changed to %d", i, status->currentState);
-            for (unsigned int addrNum = 0; addrNum < route.targetAddresses.size(); addrNum++)
+            for (unsigned int addrNum = 0; addrNum < route.targetAddresses->size(); addrNum++)
             {
-                const auto address = route.targetAddresses[addrNum];
+                const auto address = (*route.targetAddresses)[addrNum];
                 logger_log("Writting %d state to %d[%d] address", status->currentState, address, addrNum);
                 services.writer->write(address, status->currentState);
             }

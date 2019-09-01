@@ -35,8 +35,8 @@ private:
     uint8_t readerBoardsNum;
     uint8_t writerStartAddr;
     uint8_t writerBoardsNum;
-    PCF8574* *readerBoards;
-    PCF8574* *writerBoards;
+    PCF8574 **readerBoards;
+    PCF8574 **writerBoards;
 
 public:
     PCF8574IO(
@@ -79,12 +79,12 @@ public:
 struct SwitchRoute
 {
 public:
-    pstd::vector<int> targetAddresses;
+    pstd::vector<int> *targetAddresses;
     SwitchStatus *status;
 
     SwitchRoute() {}
 
-    SwitchRoute(SwitchStatus *s, pstd::vector<int> targetAddresses) : SwitchRoute()
+    SwitchRoute(SwitchStatus *s, pstd::vector<int> *targetAddresses) : SwitchRoute()
     {
         status = s;
         this->targetAddresses = targetAddresses;
