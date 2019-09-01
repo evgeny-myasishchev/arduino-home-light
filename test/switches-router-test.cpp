@@ -28,7 +28,8 @@ public:
 class MockSwitchService : public SwitchService
 {
 public:
-    MockSwitchService() : SwitchService(SwitchServiceConfig{}) {
+    MockSwitchService() : SwitchService(SwitchServiceConfig{})
+    {
     }
     MOCK_METHOD2(processSignal, void(int signal, SwitchStatus *switchStatus));
     MOCK_METHOD1(applyStateChange, void(SwitchStatus *switchStatus));
@@ -49,7 +50,7 @@ protected:
     }
 };
 
-void markStateAsChanged(int signal, SwitchStatus *switchStatus) 
+void markStateAsChanged(int signal, SwitchStatus *switchStatus)
 {
     switchStatus->currentState = signal;
     switchStatus->stateChanged = true;
@@ -62,20 +63,20 @@ TEST_F(SwitchesRouterTest, processRoutesNoSignal)
     SwitchStatus status3;
 
     const int routesNum = 3;
-    SwitchRoute routeValues[routesNum] = {
-        SwitchRoute(&status1, new pstd::vector<int>()),
-        SwitchRoute(&status2, new pstd::vector<int>()),
-        SwitchRoute(&status3, new pstd::vector<int>())
-    };
+    SwitchRoute *routeValues[routesNum] = {
+        new SwitchRoute(&status1, new pstd::vector<int>()),
+        new SwitchRoute(&status2, new pstd::vector<int>()),
+        new SwitchRoute(&status3, new pstd::vector<int>())};
 
-    const auto routes = new pstd::vector<SwitchRoute>(routeValues);
+    const auto routes = new pstd::vector<SwitchRoute *>(routeValues);
     SwitchesRouter router(routes, services);
 
     EXPECT_CALL(signalReader, read(0)).WillOnce(Return(0));
     EXPECT_CALL(switchService, processSignal(0, &status1));
     EXPECT_CALL(signalReader, read(1));
     EXPECT_CALL(switchService, processSignal(0, &status2));
-    EXPECT_CALL(signalReader, read(2)).WillOnce(Return(0));;
+    EXPECT_CALL(signalReader, read(2)).WillOnce(Return(0));
+    ;
     EXPECT_CALL(switchService, processSignal(0, &status3));
 
     router.processRoutes();
@@ -88,20 +89,20 @@ TEST_F(SwitchesRouterTest, processRoutesSeenSignalNoChanges)
     SwitchStatus status3;
 
     const int routesNum = 3;
-    SwitchRoute routeValues[routesNum] = {
-        SwitchRoute(&status1, new pstd::vector<int>()),
-        SwitchRoute(&status2, new pstd::vector<int>()),
-        SwitchRoute(&status3, new pstd::vector<int>())
-    };
+    SwitchRoute *routeValues[routesNum] = {
+        new SwitchRoute(&status1, new pstd::vector<int>()),
+        new SwitchRoute(&status2, new pstd::vector<int>()),
+        new SwitchRoute(&status3, new pstd::vector<int>())};
 
-    const auto routes = new pstd::vector<SwitchRoute>(routeValues);
+    const auto routes = new pstd::vector<SwitchRoute *>(routeValues);
     SwitchesRouter router(routes, services);
 
     EXPECT_CALL(signalReader, read(0)).WillOnce(Return(1));
     EXPECT_CALL(switchService, processSignal(1, &status1));
     EXPECT_CALL(signalReader, read(1));
     EXPECT_CALL(switchService, processSignal(0, &status2));
-    EXPECT_CALL(signalReader, read(2)).WillOnce(Return(1));;
+    EXPECT_CALL(signalReader, read(2)).WillOnce(Return(1));
+    ;
     EXPECT_CALL(switchService, processSignal(1, &status3));
 
     router.processRoutes();
@@ -119,13 +120,12 @@ TEST_F(SwitchesRouterTest, processRoutesSeenSignalGotChanges)
     int route3Addr[] = {9, 10};
 
     const int routesNum = 3;
-    SwitchRoute routeValues[routesNum] = {
-        SwitchRoute(&status1, new pstd::vector<int>(route1Addr)),
-        SwitchRoute(&status2, new pstd::vector<int>(route2Addr)),
-        SwitchRoute(&status3, new pstd::vector<int>(route3Addr))
-    };
+    SwitchRoute *routeValues[routesNum] = {
+        new SwitchRoute(&status1, new pstd::vector<int>(route1Addr)),
+        new SwitchRoute(&status2, new pstd::vector<int>(route2Addr)),
+        new SwitchRoute(&status3, new pstd::vector<int>(route3Addr))};
 
-    const auto routes = new pstd::vector<SwitchRoute>(routeValues);
+    const auto routes = new pstd::vector<SwitchRoute *>(routeValues);
     SwitchesRouter router(routes, services);
 
     EXPECT_CALL(signalReader, read(0)).WillOnce(Return(1));
