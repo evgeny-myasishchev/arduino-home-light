@@ -3,7 +3,7 @@
 namespace switches
 {
 
-SwitchesRouter::SwitchesRouter(pstd::vector<SwitchRoute> routes, SwitchRouterServices services)
+SwitchesRouter::SwitchesRouter(pstd::vector<SwitchRoute> * routes, SwitchRouterServices services)
 {
     this->routes = routes;
     this->services = services;
@@ -11,9 +11,9 @@ SwitchesRouter::SwitchesRouter(pstd::vector<SwitchRoute> routes, SwitchRouterSer
 
 void SwitchesRouter::processRoutes()
 {
-    for (int i = 0; i < routes.size(); i++)
+    for (int i = 0; i < routes->size(); i++)
     {
-        auto route = routes[i];
+        auto route = (*routes)[i];
         auto status = route.status;
         const int signal = services.reader->read(i);
         if (signal == HIGH)
