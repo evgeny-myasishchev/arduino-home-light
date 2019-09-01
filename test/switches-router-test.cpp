@@ -68,7 +68,7 @@ TEST_F(SwitchesRouterTest, processRoutesNoSignal)
         SwitchRoute(&status3, pstd::vector<int>())
     };
 
-    pstd::vector<SwitchRoute> routes(routeValues);
+    const auto routes = new pstd::vector<SwitchRoute>(routeValues);
     SwitchesRouter router(routes, services);
 
     EXPECT_CALL(signalReader, read(0)).WillOnce(Return(0));
@@ -94,7 +94,7 @@ TEST_F(SwitchesRouterTest, processRoutesSeenSignalNoChanges)
         SwitchRoute(&status3, pstd::vector<int>())
     };
 
-    pstd::vector<SwitchRoute> routes(routeValues);
+    const auto routes = new pstd::vector<SwitchRoute>(routeValues);
     SwitchesRouter router(routes, services);
 
     EXPECT_CALL(signalReader, read(0)).WillOnce(Return(1));
@@ -125,7 +125,7 @@ TEST_F(SwitchesRouterTest, processRoutesSeenSignalGotChanges)
         SwitchRoute(&status3, pstd::vector<int>(route3Addr))
     };
 
-    pstd::vector<SwitchRoute> routes(routeValues);
+    const auto routes = new pstd::vector<SwitchRoute>(routeValues);
     SwitchesRouter router(routes, services);
 
     EXPECT_CALL(signalReader, read(0)).WillOnce(Return(1));
