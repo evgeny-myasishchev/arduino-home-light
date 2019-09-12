@@ -1,8 +1,8 @@
-namespace v2
-{
-
 #ifndef V2_PIN_BUS_H
 #define V2_PIN_BUS_H
+
+namespace v2
+{
 
 #include <stdint.h>
 
