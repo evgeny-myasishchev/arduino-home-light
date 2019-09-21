@@ -5,6 +5,8 @@ namespace v2
 {
 
 #include <stdint.h>
+#include <stddef.h>
+#include <array-ptr.h>
 
 struct Switch
 {
@@ -13,6 +15,8 @@ public:
     bool stateChanged = false;
     unsigned int seenSignalTimes = 0;
     unsigned int seenSignalSince = 0;
+    
+    // ArrayPtr targetAddresses;
 
     Switch() {}
 

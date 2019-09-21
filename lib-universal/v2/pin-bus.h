@@ -1,10 +1,10 @@
 #ifndef V2_PIN_BUS_H
 #define V2_PIN_BUS_H
 
+#include <stdint.h>
+
 namespace v2
 {
-
-#include <stdint.h>
 
 class PinBus
 {
@@ -55,10 +55,10 @@ public:
 
     void init();
 
-    void fetchState() = 0;
+    void fetchState();
     uint8_t readPin(uint8_t channel);
     uint8_t writePin(uint8_t channel, uint8_t state);
-    void commitState() = 0;
+    void commitState();
 };
 
 #endif
