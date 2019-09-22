@@ -65,16 +65,16 @@ PCF8574Bus::PCF8574Bus(const byte busSize) : PinBus(busSize)
     }
 }
 
-~PCF8574Bus::PCF8574Bus()
+PCF8574Bus::~PCF8574Bus()
 {
     delete boards;
 }
 
 void PCF8574Bus::setup()
 {
-    for (size_t i = 0; i < this->busSize(); i++)
+    for (size_t i = 0; i < this->getBusSize(); i++)
     {
-        boards[i]->begin(initialState);
+        boards[i]->begin(0x00);
     }
 }
 
