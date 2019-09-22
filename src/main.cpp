@@ -21,4 +21,7 @@ void setup()
 
 void loop()
 {
+    bus.readState();
+
+    bus.writeState();
 }

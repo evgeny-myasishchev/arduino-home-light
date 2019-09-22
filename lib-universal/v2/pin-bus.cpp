@@ -78,9 +78,21 @@ void PCF8574Bus::setup()
     }
 }
 
-void PCF8574Bus::readState() {}
+void PCF8574Bus::readState() 
+{
+    for (size_t i = 0; i < this->getBusSize(); i++)
+    {
+        this->setStateByte(i, boards[i]->read8());
+    }
+}
 
-void PCF8574Bus::writeState() {}
+void PCF8574Bus::writeState() 
+{
+    for (size_t i = 0; i < this->getBusSize(); i++)
+    {
+        boards[i]->write8(this->getStateByte(i));
+    }
+}
 
 #endif
 
