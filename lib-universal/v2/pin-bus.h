@@ -3,6 +3,10 @@
 
 #include <arduino-compat.h>
 
+#ifdef ARDUINO
+#include <PCF8574.h>
+#endif
+
 namespace v2
 {
 
@@ -33,8 +37,6 @@ public:
 };
 
 #ifdef ARDUINO
-
-#include <PCF8574.h>
 
 #define PCF8574_BASE_ADDR 0x20
 
