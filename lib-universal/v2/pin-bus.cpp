@@ -33,6 +33,7 @@ void PinBus::setStateByte(const uint8_t byteIndex, const uint8_t state)
 
 const uint8_t PinBus::getStateByte(const uint8_t byteIndex)
 {
+    return this->busState[byteIndex];
 }
 
 const uint8_t PinBus::getPin(const uint8_t byteIndex, const uint8_t bit) const
@@ -47,6 +48,11 @@ const uint8_t PinBus::getPin(const uint8_t byteIndex, const uint8_t bit) const
 
 const void PinBus::setPin(const uint8_t byteIndex, const uint8_t bit, uint8_t state)
 {
+    if (byteIndex >= this->busSize)
+    {
+        return;
+    }
+    bitWrite(this->busState[byteIndex], bit, state);
 }
 
 } // namespace v2
