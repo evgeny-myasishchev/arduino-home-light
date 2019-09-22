@@ -1,8 +1,5 @@
 #include <pin-bus.h>
 
-#include <string>
-#include <iostream>
-
 namespace v2
 {
 
@@ -54,5 +51,37 @@ const void PinBus::setPin(const byte byteIndex, const byte bit, byte state)
     }
     bitWrite(this->busState[byteIndex], bit, state);
 }
+
+#ifdef ARDUINO
+
+PCF8574Bus::PCF8574Bus(const byte busSize) : PinBus(busSize)
+{
+    byte initialAddress = PCF8574_BASE_ADDR;
+    boards = new PCF8574 *[busSize];
+    for (size_t i = 0; i < busSize; i++)
+    {
+        const auto boardAddr = initialAddress++;
+        boards[i] = new PCF8574(boardAddr);
+    }
+}
+
+~PCF8574Bus::PCF8574Bus()
+{
+    delete boards;
+}
+
+void PCF8574Bus::setup()
+{
+    for (size_t i = 0; i < this->busSize(); i++)
+    {
+        boards[i]->begin(initialState);
+    }
+}
+
+void PCF8574Bus::readState() {}
+
+void PCF8574Bus::writeState() {}
+
+#endif
 
 } // namespace v2

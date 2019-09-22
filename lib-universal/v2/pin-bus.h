@@ -33,6 +33,28 @@ public:
     virtual void writeState() = 0;
 };
 
+#ifdef ARDUINO
+
+#include <PCF8574.h>
+
+#define PCF8574_BASE_ADDR 0x20
+
+class PCF8574Bus : public PinBus
+{
+private:
+    PCF8574 **boards;
+public:
+    PCF8574Bus(const byte busSize);
+    ~PCF8574Bus();
+
+    void setup();
+
+    void readState();
+    void writeState();
+}
+
+#endif
+
 } // namespace v2
 
 #endif
