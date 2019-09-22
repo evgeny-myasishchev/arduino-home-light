@@ -1,6 +1,8 @@
 #ifndef test_random_h
 #define test_random_h
 
+#include <random>
+
 namespace test
 {
 

@@ -1,4 +1,3 @@
-
 #include <switch-service-v2.h>
 
 namespace v2
