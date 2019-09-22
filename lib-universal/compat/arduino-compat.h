@@ -2,8 +2,13 @@
 #define arduino_compat_h
 
 #ifndef ARDUINO
+
+#include <stdint.h>
+
 #define HIGH 0x1
 #define LOW  0x0
+
+typedef uint8_t byte;
 
 #define bitRead(value, bit) (((value) >> (bit)) & 0x01)
 #define bitSet(value, bit) ((value) |= (1UL << (bit)))

@@ -6,10 +6,10 @@
 namespace v2
 {
 
-PinBus::PinBus(const uint8_t busSize)
+PinBus::PinBus(const byte busSize)
 {
     this->busSize = busSize;
-    this->busState = new uint8_t[busSize]();
+    this->busState = new byte[busSize]();
 }
 
 PinBus::~PinBus()
@@ -17,12 +17,12 @@ PinBus::~PinBus()
     delete this->busState;
 }
 
-const uint8_t PinBus::getBusSize()
+const byte PinBus::getBusSize()
 {
     return busSize;
 }
 
-void PinBus::setStateByte(const uint8_t byteIndex, const uint8_t state)
+void PinBus::setStateByte(const byte byteIndex, const byte state)
 {
     if (byteIndex >= this->busSize)
     {
@@ -31,12 +31,12 @@ void PinBus::setStateByte(const uint8_t byteIndex, const uint8_t state)
     this->busState[byteIndex] = state;
 }
 
-const uint8_t PinBus::getStateByte(const uint8_t byteIndex)
+const byte PinBus::getStateByte(const byte byteIndex)
 {
     return this->busState[byteIndex];
 }
 
-const uint8_t PinBus::getPin(const uint8_t byteIndex, const uint8_t bit) const
+const byte PinBus::getPin(const byte byteIndex, const byte bit) const
 {
     if (byteIndex >= this->busSize)
     {
@@ -46,7 +46,7 @@ const uint8_t PinBus::getPin(const uint8_t byteIndex, const uint8_t bit) const
     return bitRead(byte, bit);
 }
 
-const void PinBus::setPin(const uint8_t byteIndex, const uint8_t bit, uint8_t state)
+const void PinBus::setPin(const byte byteIndex, const byte bit, byte state)
 {
     if (byteIndex >= this->busSize)
     {

@@ -10,9 +10,9 @@ class TestPinBus : public v2::PinBus
 {
 
 public:
-    uint8_t *pendingTestState;
+    byte *pendingTestState;
 
-    TestPinBus(const uint8_t busSize) : PinBus(busSize)
+    TestPinBus(const byte busSize) : PinBus(busSize)
     {
     }
 
@@ -35,7 +35,7 @@ public:
 
 TEST(V2PinBus, initialState)
 {
-    const uint8_t maxBytes = test::randomNumber(5, 10);
+    const byte maxBytes = test::randomNumber(5, 10);
     const TestPinBus bus(maxBytes);
     for (size_t byteIndex = 0; byteIndex < maxBytes; byteIndex++)
     {
@@ -46,8 +46,8 @@ TEST(V2PinBus, initialState)
 
 TEST(V2PinBus, getPin)
 {
-    const uint8_t maxBytes = test::randomNumber(5, 10);
-    uint8_t *state = new uint8_t[maxBytes]();
+    const byte maxBytes = test::randomNumber(5, 10);
+    byte *state = new byte[maxBytes]();
     for (size_t byteIndex = 0; byteIndex < maxBytes; byteIndex++)
     {
         state[byteIndex] = test::randomNumber(0, 255);
@@ -68,13 +68,13 @@ TEST(V2PinBus, getPin)
 
 TEST(V2PinBus, setPin)
 {
-    const uint8_t maxBytes = test::randomNumber(5, 10);
-    uint8_t *state = new uint8_t[maxBytes]();
+    const byte maxBytes = test::randomNumber(5, 10);
+    byte *state = new byte[maxBytes]();
     TestPinBus bus(maxBytes);
     bus.pendingTestState = state;
     bus.readState();
 
-    uint8_t *randomState = new uint8_t[maxBytes]();
+    byte *randomState = new byte[maxBytes]();
     for (size_t byteIndex = 0; byteIndex < maxBytes; byteIndex++)
     {
         const auto byteVal = test::randomNumber(0, 255);

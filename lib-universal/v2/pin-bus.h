@@ -11,19 +11,19 @@ class PinBus
 {
 
 private:
-    uint8_t *busState;
-    uint8_t busSize;
+    byte *busState;
+    byte busSize;
 
 protected:
-    const uint8_t getBusSize();
-    void setStateByte(const uint8_t byteIndex, const uint8_t state);
-    const uint8_t getStateByte(const uint8_t byteIndex);
+    const byte getBusSize();
+    void setStateByte(const byte byteIndex, const byte state);
+    const byte getStateByte(const byte byteIndex);
 
 public:
-    PinBus(const uint8_t busSize);
+    PinBus(const byte busSize);
     ~PinBus();
-    const uint8_t getPin(const uint8_t byteIndex, const uint8_t bit) const;
-    const void setPin(const uint8_t byteIndex, const uint8_t bit, uint8_t state);
+    const byte getPin(const byte byteIndex, const byte bit) const;
+    const void setPin(const byte byteIndex, const byte bit, byte state);
 
     // Read bus state from underlying implementation (e.g hardware)
     // and initialize internal state
