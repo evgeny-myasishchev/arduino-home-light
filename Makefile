@@ -1,4 +1,4 @@
-PIO_USER_LIBS_HOME=.piolibdeps
+PIO_USER_LIBS_HOME=.pio/libdeps/universal
 PIO_HOME := $(HOME)/.platformio
 FRAMEWORK_DIR := $(PIO_HOME)/packages/framework-arduinoavr
 
