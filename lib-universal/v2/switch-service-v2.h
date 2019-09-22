@@ -1,11 +1,10 @@
 #ifndef V2_SwitchService_h
 #define V2_SwitchService_h
 
+#include <arduino-compat.h>
 #include <Timers.h>
-#include <stdint.h>
 #include <switch.h>
 #include <logger.h>
-#include <arduino-compat.h>
 
 namespace v2
 {

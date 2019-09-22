@@ -4,6 +4,7 @@
 #ifndef ARDUINO
 
 #include <stdint.h>
+#include <stddef.h>
 
 #define HIGH 0x1
 #define LOW  0x0

@@ -4,10 +4,7 @@
 // To disable define this somewhere before including logger.h
 // #ifndef DISABLE_LOGGING
 
-#ifdef ARDUINO
-#include <Print.h>
-#endif
-
+#include <arduino-compat.h>
 #include <stdarg.h>
 #include <Timers.h>
 

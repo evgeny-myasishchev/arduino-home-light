@@ -2,7 +2,6 @@
 #define V2_PIN_BUS_H
 
 #include <arduino-compat.h>
-#include <stdint.h>
 
 namespace v2
 {

@@ -3,9 +3,7 @@
 
 namespace v2
 {
-
-#include <stdint.h>
-#include <stddef.h>
+#include <arduino-compat.h>
 #include <array-ptr.h>
 
 struct Switch

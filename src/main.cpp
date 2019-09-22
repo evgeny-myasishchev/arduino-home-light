@@ -1,5 +1,6 @@
-#include <Arduino.h>
+#include <arduino-compat.h>
 #include <logger.h>
+#include <pin-bus.h>
 
 void setup()
 {
