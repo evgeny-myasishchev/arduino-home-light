@@ -17,8 +17,18 @@ PinBus::~PinBus()
     delete this->busState;
 }
 
+const uint8_t PinBus::getBusSize()
+{
+    return busSize;
+}
+
 void PinBus::setStateByte(const uint8_t byteIndex, const uint8_t state)
 {
+    if (byteIndex >= this->busSize)
+    {
+        return;
+    }
+    this->busState[byteIndex] = state;
 }
 
 const uint8_t PinBus::getStateByte(const uint8_t byteIndex)
@@ -27,6 +37,10 @@ const uint8_t PinBus::getStateByte(const uint8_t byteIndex)
 
 const uint8_t PinBus::getPin(const uint8_t byteIndex, const uint8_t bit) const
 {
+    if (byteIndex >= this->busSize)
+    {
+        return LOW;
+    }
     const auto byte = this->busState[byteIndex];
     return bitRead(byte, bit);
 }
