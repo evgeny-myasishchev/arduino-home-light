@@ -10,9 +10,9 @@ void setup()
   while(!Serial) {} // Portability for Leonardo/Micro
   logger_setup(&Serial);
 
-  Test::exclude("*");
+  // Test::exclude("*");
   // Test::include("dev_*");
-  Test::include("signal_io_*");
+  // Test::include("signal_io_*");
 }
 
 void loop()
