@@ -64,6 +64,11 @@ namespace logger
                     out->print((int)va_arg(args, int), DEC);
                     continue;
                 }
+                if (*format == 'b')
+                {
+                    out->print((int)va_arg(args, int), BIN);
+                    continue;
+                }
             }
             out->print((char)*format);
         }
