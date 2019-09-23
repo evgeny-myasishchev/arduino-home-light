@@ -11,6 +11,7 @@
 namespace logger
 {
     #define DEC 10
+    #define BIN 2
 
     class Output
     {
