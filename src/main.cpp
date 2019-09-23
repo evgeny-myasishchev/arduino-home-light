@@ -4,12 +4,12 @@
 
 using namespace v2;
 
-#define BUS_SIZE 5
 
 #define RELAY_BOARDS 2
 #define INPUT_BOARDS 3
+#define BUS_SIZE RELAY_BOARDS + INPUT_BOARDS
 
-PCF8574Bus bus(BUS_SIZE);
+PCF8574Bus bus(RELAY_BOARDS, INPUT_BOARDS);
 
 void setup()
 {
@@ -24,25 +24,17 @@ void setup()
     logger_log("Controller initialized.");
 }
 
-byte state = LOW;
-
 void loop()
 {
-    state = state == LOW ? HIGH : LOW;
     bus.readState();
     for (size_t relayIndex = 0; relayIndex < RELAY_BOARDS; relayIndex++)
     {
         for (size_t bit = 0; bit < 8; bit++)
         {
-            bus.setPin(relayIndex, bit, state);
-            // if (bitState == LOW)
-            // {
-            //     logger_log("Bus byte: %d pin: %d state: %d", i, bit, bitState);
-            // }
+            const auto relayState = bus.getPin(RELAY_BOARDS + relayIndex, bit);
+            bus.setPin(relayIndex, bit, relayState);
         }
     }
 
     bus.writeState();
-
-    delay(1000);
 }

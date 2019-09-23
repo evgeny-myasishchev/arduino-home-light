@@ -41,12 +41,18 @@ public:
 
 #define PCF8574_BASE_ADDR 0x20
 
+// Bus implementation based on PCF8574 boards
+// Address space starts from output boards (e.g relays)
+// followed by input boards (e.g switches)
 class PCF8574Bus : public PinBus
 {
 private:
+    byte outputBoardsNum;
+    byte inputBoardsNum;
+
     PCF8574 **boards;
 public:
-    PCF8574Bus(const byte busSize);
+    PCF8574Bus(const byte outputBoardsNum, const byte inputBoardsNum);
     ~PCF8574Bus();
 
     void setup(const byte initialState);

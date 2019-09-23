@@ -60,8 +60,10 @@ const void PinBus::setPin(const byte byteIndex, const byte bit, byte state)
 
 #ifdef ARDUINO
 
-PCF8574Bus::PCF8574Bus(const byte busSize) : PinBus(busSize)
+PCF8574Bus::PCF8574Bus(const byte outputBoardsNum, const byte inputBoardsNum)
+    : outputBoardsNum(outputBoardsNum), inputBoardsNum(inputBoardsNum), PinBus(outputBoardsNum + inputBoardsNum)
 {
+    const auto busSize = this->getBusSize();
     byte initialAddress = PCF8574_BASE_ADDR;
     boards = new PCF8574 *[busSize];
     for (size_t i = 0; i < busSize; i++)
@@ -87,9 +89,10 @@ void PCF8574Bus::setup(const byte initialState)
 
 void PCF8574Bus::readState() 
 {
-    for (size_t i = 0; i < this->getBusSize(); i++)
+    // Reading only from input boards
+    for (size_t i = outputBoardsNum; i < this->getBusSize(); i++)
     {
-        const auto byteValue = boards[i]->readButton8(0xFF);
+        const auto byteValue = boards[i]->read8();
         this->setStateByte(i, byteValue);
         pin_bus_log("Loaded board byte: %d, value: %b", i, byteValue);
     }
@@ -97,7 +100,8 @@ void PCF8574Bus::readState()
 
 void PCF8574Bus::writeState() 
 {
-    for (size_t i = 0; i < this->getBusSize(); i++)
+    // Write only to outputs
+    for (size_t i = 0; i < outputBoardsNum; i++)
     {
         boards[i]->write8(this->getStateByte(i));
     }
