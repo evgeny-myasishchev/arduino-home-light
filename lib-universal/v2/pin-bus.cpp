@@ -3,6 +3,12 @@
 namespace v2
 {
 
+#ifdef PIN_BUS_VERBOSE
+#define pin_bus_log logger_log
+#else
+#define pin_bus_log
+#endif
+
 PinBus::PinBus(const byte busSize)
 {
     this->busSize = busSize;
@@ -70,19 +76,22 @@ PCF8574Bus::~PCF8574Bus()
     delete boards;
 }
 
-void PCF8574Bus::setup()
+void PCF8574Bus::setup(const byte initialState)
 {
     for (size_t i = 0; i < this->getBusSize(); i++)
     {
-        boards[i]->begin(0x00);
+        boards[i]->begin();
     }
+    pin_bus_log("Initializing %d bus boards. Initial state: %d", this->getBusSize(), initialState);
 }
 
 void PCF8574Bus::readState() 
 {
     for (size_t i = 0; i < this->getBusSize(); i++)
     {
-        this->setStateByte(i, boards[i]->read8());
+        const auto byteValue = boards[i]->readButton8(0xFF);
+        this->setStateByte(i, byteValue);
+        pin_bus_log("Loaded board byte: %d, value: %b", i, byteValue);
     }
 }
 

@@ -2,6 +2,7 @@
 #define V2_PIN_BUS_H
 
 #include <arduino-compat.h>
+#include <logger.h>
 
 #ifdef ARDUINO
 #include <PCF8574.h>
@@ -48,7 +49,7 @@ public:
     PCF8574Bus(const byte busSize);
     ~PCF8574Bus();
 
-    void setup();
+    void setup(const byte initialState);
 
     void readState();
     void writeState();
