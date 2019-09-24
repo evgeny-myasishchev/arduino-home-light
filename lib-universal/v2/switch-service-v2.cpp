@@ -12,6 +12,10 @@ SwitchService::SwitchService(SwitchServiceConfig cfg)
                cfg.minSignalIterations);
 }
 
+void SwitchService::applyStateChange(Switch *aSwitch)
+{
+}
+
 PushButtonSwitchService::PushButtonSwitchService(SwitchServiceConfig cfg) : SwitchService(cfg)
 {
 }
@@ -52,10 +56,6 @@ void PushButtonSwitchService::processSignal(uint8_t signal, Switch *sw)
         sw->seenSignalTimes = 0;
         sw->seenSignalSince = 0;
     }
-}
-
-void PushButtonSwitchService::applyStateChange(Switch *aSwitch)
-{
 }
 
 } // namespace v2

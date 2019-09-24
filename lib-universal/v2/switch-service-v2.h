@@ -49,7 +49,7 @@ protected:
 public:
     SwitchService(SwitchServiceConfig cfg);
     virtual void processSignal(uint8_t signal, Switch *sw) = 0;
-    virtual void applyStateChange(Switch *sw) = 0;
+    void applyStateChange(Switch *sw);
 };
 
 // /*
@@ -64,6 +64,22 @@ class PushButtonSwitchService : public SwitchService
 {
 public:
     PushButtonSwitchService(SwitchServiceConfig cfg);
+    void processSignal(uint8_t signal, Switch *sw);
+    void applyStateChange(Switch *sw);
+};
+
+// /*
+// Toggle alg:
+
+// 1) If see signal for more than Xms and more than Ytimes, set state to ON
+// 2) If stop seeing signal for more than Xms and more than Ytimes, set state to OFF
+// 3) Keep the state unchanged if stopped seeing the signal
+// 4) Go to 1 if started seeing the signal
+//  */
+class ToggleButtonSwitchService : public SwitchService
+{
+public:
+    ToggleButtonSwitchService(SwitchServiceConfig cfg);
     void processSignal(uint8_t signal, Switch *sw);
     void applyStateChange(Switch *sw);
 };

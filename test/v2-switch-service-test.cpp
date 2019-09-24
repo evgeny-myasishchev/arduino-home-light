@@ -22,6 +22,8 @@ protected:
     v2::SwitchServiceConfig cfg;
     v2::SwitchService *svc;
 
+    virtual v2::SwitchService* createSwitchService(v2::SwitchServiceConfig cfg) = 0;
+
     void SetUp() override
     {
         this->nowMillis = test::randomNumber(100, 600);
@@ -41,11 +43,19 @@ protected:
             minIterations,
             &fakeTimers);
 
-        this->svc = new v2::PushButtonSwitchService(cfg);
+        this->svc = createSwitchService(cfg);
     }
 };
 
-TEST_F(V2SwitchServiceTest, ChangeStateHighWhenSeenSignalEnough)
+class V2PushButtonSwitchServiceTest : public V2SwitchServiceTest
+{
+    v2::SwitchService* createSwitchService(v2::SwitchServiceConfig cfg)
+    {
+        return new v2::PushButtonSwitchService(cfg);
+    }
+};
+
+TEST_F(V2PushButtonSwitchServiceTest, ChangeStateHighWhenSeenSignalEnough)
 {
     v2::Switch status;
 
@@ -71,7 +81,7 @@ TEST_F(V2SwitchServiceTest, ChangeStateHighWhenSeenSignalEnough)
     EXPECT_EQ(status.seenSignalSince, nowMillis) << "Should remember first time seen signal";
 }
 
-TEST_F(V2SwitchServiceTest, DoesntChangeIfContinuingSeeingTheSignal)
+TEST_F(V2PushButtonSwitchServiceTest, DoesntChangeIfContinuingSeeingTheSignal)
 {
     v2::Switch status;
 
@@ -92,7 +102,7 @@ TEST_F(V2SwitchServiceTest, DoesntChangeIfContinuingSeeingTheSignal)
     }
 }
 
-TEST_F(V2SwitchServiceTest, ChangeStateLowWhenSeenSignalEnough)
+TEST_F(V2PushButtonSwitchServiceTest, ChangeStateLowWhenSeenSignalEnough)
 {
     v2::Switch status(HIGH, false, 0, 0);
 
@@ -118,7 +128,7 @@ TEST_F(V2SwitchServiceTest, ChangeStateLowWhenSeenSignalEnough)
     EXPECT_EQ(status.seenSignalSince, nowMillis) << "Should remember first time seen signal";
 }
 
-TEST_F(V2SwitchServiceTest, DoesntChangeStateOnLow)
+TEST_F(V2PushButtonSwitchServiceTest, DoesntChangeStateOnLow)
 {
     const int seenSignalTimes = test::randomNumber(100, 600);
     const unsigned int seenSignalSince = test::randomNumber(100, 600);
@@ -135,7 +145,7 @@ TEST_F(V2SwitchServiceTest, DoesntChangeStateOnLow)
     }
 }
 
-TEST_F(V2SwitchServiceTest, ResetChangeDetectionOnLow)
+TEST_F(V2PushButtonSwitchServiceTest, ResetChangeDetectionOnLow)
 {
     const int seenSignalTimes = test::randomNumber(100, 600);
     const unsigned int seenSignalSince = test::randomNumber(100, 600);
