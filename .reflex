@@ -1,1 +1,1 @@
--s -d none -R ^build/ -R ^.vscode/ -R ^.piolibdeps -r \.cpp$
+-s -d none -R ^build/ -R ^.vscode/ -R ^.pio -r \.cpp$
