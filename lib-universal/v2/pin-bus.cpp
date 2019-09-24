@@ -93,8 +93,7 @@ void PCF8574Bus::setup(const byte initialState)
 
 void PCF8574Bus::readState() 
 {
-    // Reading only from input boards
-    for (size_t i = outputBoardsNum; i < this->getBusSize(); i++)
+    for (size_t i = 0; i < this->getBusSize(); i++)
     {
         const auto byteValue = boards[i]->read8();
         this->setStateByte(i, byteValue);
@@ -104,7 +103,7 @@ void PCF8574Bus::readState()
 
 void PCF8574Bus::writeState() 
 {
-    // Write only to outputs
+    // Write only to outputs. Inputs should stay high so we could get a signal
     for (size_t i = 0; i < outputBoardsNum; i++)
     {
         boards[i]->write8(this->getStateByte(i));
