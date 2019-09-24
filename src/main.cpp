@@ -27,12 +27,25 @@ void setup()
 void loop()
 {
     bus.readState();
+
     for (size_t relayIndex = 0; relayIndex < RELAY_BOARDS; relayIndex++)
     {
         for (size_t bit = 0; bit < 8; bit++)
         {
-            const auto relayState = bus.getPin(RELAY_BOARDS + relayIndex, bit);
-            bus.setPin(relayIndex, bit, relayState);
+            const byte relayAddress = relayIndex * 8 + bit;
+            const byte relaySwitchAddress = RELAY_BOARDS * 8 + relayAddress;
+            const auto relaySwitchState = bus.getPin(relaySwitchAddress);
+            bus.setPin(relayIndex * 8 + bit, relaySwitchState);
+        }
+    }
+
+    const byte switchAllState = bus.getPin((RELAY_BOARDS + INPUT_BOARDS - 1) * 8);
+    if(switchAllState == LOW) 
+    {
+        logger_log("Got signal from all switch");
+        for (size_t i = 0; i < RELAY_BOARDS * 8; i++)
+        {
+            bus.setPin(i, LOW);
         }
     }
 
