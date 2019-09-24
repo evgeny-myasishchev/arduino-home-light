@@ -26,8 +26,8 @@ protected:
 public:
     PinBus(const byte busSize);
     ~PinBus();
-    const byte getPin(const byte byteIndex, const byte bit) const;
-    const void setPin(const byte byteIndex, const byte bit, byte state);
+    const byte getPin(const byte pinIndex) const;
+    const void setPin(const byte pinIndex, byte state);
 
     // Read bus state from underlying implementation (e.g hardware)
     // and initialize internal state

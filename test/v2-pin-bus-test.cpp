@@ -37,9 +37,11 @@ TEST(V2PinBus, initialState)
 {
     const byte maxBytes = test::randomNumber(5, 10);
     const TestPinBus bus(maxBytes);
-    for (size_t byteIndex = 0; byteIndex < maxBytes; byteIndex++)
+
+    const byte totalPins = maxBytes * 8;
+    for (size_t pinIndex = 0; pinIndex < totalPins; pinIndex++)
     {
-        const auto pin = bus.getPin(byteIndex, 0);
+        const auto pin = bus.getPin(pinIndex);
         EXPECT_EQ(LOW, pin);
     }
 }
@@ -56,13 +58,17 @@ TEST(V2PinBus, getPin)
     TestPinBus bus(maxBytes);
     bus.pendingTestState = state;
     bus.readState();
-    for (size_t byteIndex = 0; byteIndex < maxBytes; byteIndex++)
+
+    const byte totalPins = maxBytes * 8;
+    for (size_t pinIndex = 0; pinIndex < totalPins; pinIndex++)
     {
-        for (size_t bit = 0; bit < 8; bit++)
-        {
-            const auto pin = bus.getPin(byteIndex, bit);
-            EXPECT_EQ(bitRead(state[byteIndex], bit), pin);
-        }
+
+        const auto pin = bus.getPin(pinIndex);
+
+        const byte byteIndex = pinIndex / 8;
+        const byte bit = pinIndex % 8;
+
+        EXPECT_EQ(bitRead(state[byteIndex], bit), pin);
     }
 }
 
@@ -81,7 +87,7 @@ TEST(V2PinBus, setPin)
         randomState[byteIndex] = byteVal;
         for (size_t bit = 0; bit < 8; bit++)
         {
-            bus.setPin(byteIndex, bit, bitRead(byteVal, bit));
+            bus.setPin((byteIndex * 8) + bit, bitRead(byteVal, bit));
         }
     }
 

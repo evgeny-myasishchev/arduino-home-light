@@ -39,8 +39,10 @@ const byte PinBus::getStateByte(const byte byteIndex)
     return this->busState[byteIndex];
 }
 
-const byte PinBus::getPin(const byte byteIndex, const byte bit) const
+const byte PinBus::getPin(const byte pinIndex) const
 {
+    const byte byteIndex = pinIndex / 8;
+    const byte bit = pinIndex % 8;
     if (byteIndex >= this->busSize)
     {
         return LOW;
@@ -49,8 +51,10 @@ const byte PinBus::getPin(const byte byteIndex, const byte bit) const
     return bitRead(byte, bit);
 }
 
-const void PinBus::setPin(const byte byteIndex, const byte bit, byte state)
+const void PinBus::setPin(const byte pinIndex, byte state)
 {
+    const byte byteIndex = pinIndex / 8;
+    const byte bit = pinIndex % 8;
     if (byteIndex >= this->busSize)
     {
         return;
