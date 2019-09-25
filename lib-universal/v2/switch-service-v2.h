@@ -49,7 +49,7 @@ protected:
 public:
     SwitchService(SwitchServiceConfig cfg);
     virtual void processSignal(uint8_t signal, Switch *sw) = 0;
-    void applyStateChange(Switch *sw);
+    virtual void applyStateChange(Switch *sw) = 0;
 };
 
 // /*
