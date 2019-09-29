@@ -22,7 +22,7 @@ protected:
     v2::SwitchServiceConfig cfg;
     v2::SwitchService *svc;
 
-    virtual v2::SwitchService* createSwitchService(v2::SwitchServiceConfig cfg) = 0;
+    virtual v2::SwitchService *createSwitchService(v2::SwitchServiceConfig cfg) = 0;
 
     void SetUp() override
     {
@@ -30,11 +30,10 @@ protected:
         this->minSignalDurationMs = test::randomNumber(100, 600);
         this->minIterations = test::randomNumber(5, 10);
 
-        logger_log("Setup config: minIterations=%d, minSignalDurationMs=%d, initialNow=%d", 
-            minIterations,
-            minSignalDurationMs,
-            nowMillis
-        );
+        logger_log("Setup config: minIterations=%d, minSignalDurationMs=%d, initialNow=%d",
+                   minIterations,
+                   minSignalDurationMs,
+                   nowMillis);
 
         fakeTimers.setMillis(this->nowMillis);
 
@@ -49,7 +48,7 @@ protected:
 
 class V2PushButtonSwitchServiceTest : public V2SwitchServiceTest
 {
-    v2::SwitchService* createSwitchService(v2::SwitchServiceConfig cfg)
+    v2::SwitchService *createSwitchService(v2::SwitchServiceConfig cfg)
     {
         return new v2::PushButtonSwitchService(cfg);
     }
@@ -57,7 +56,7 @@ class V2PushButtonSwitchServiceTest : public V2SwitchServiceTest
 
 class V2ToggleButtonSwitchServiceTest : public V2SwitchServiceTest
 {
-    v2::SwitchService* createSwitchService(v2::SwitchServiceConfig cfg)
+    v2::SwitchService *createSwitchService(v2::SwitchServiceConfig cfg)
     {
         return new v2::ToggleButtonSwitchService(cfg);
     }
@@ -65,7 +64,7 @@ class V2ToggleButtonSwitchServiceTest : public V2SwitchServiceTest
 
 TEST_F(V2PushButtonSwitchServiceTest, ChangeStateHighWhenSeenSignalEnough)
 {
-    v2::Switch status;
+    v2::Switch status{};
 
     int durationIncrease = minSignalDurationMs / minIterations;
 
@@ -91,7 +90,7 @@ TEST_F(V2PushButtonSwitchServiceTest, ChangeStateHighWhenSeenSignalEnough)
 
 TEST_F(V2PushButtonSwitchServiceTest, DoesntChangeIfContinuingSeeingTheSignal)
 {
-    v2::Switch status;
+    v2::Switch status{};
 
     int durationIncrease = minSignalDurationMs / minIterations;
 
@@ -112,7 +111,7 @@ TEST_F(V2PushButtonSwitchServiceTest, DoesntChangeIfContinuingSeeingTheSignal)
 
 TEST_F(V2PushButtonSwitchServiceTest, ChangeStateLowWhenSeenSignalEnough)
 {
-    v2::Switch status(HIGH, false, 0, 0);
+    v2::Switch status{.state = HIGH, .stateChanged = false, .seenSignalTimes = 0, .seenSignalSince = 0};
 
     int durationIncrease = minSignalDurationMs / minIterations;
 
@@ -138,9 +137,9 @@ TEST_F(V2PushButtonSwitchServiceTest, ChangeStateLowWhenSeenSignalEnough)
 
 TEST_F(V2PushButtonSwitchServiceTest, DoesntChangeStateOnLow)
 {
-    const int seenSignalTimes = test::randomNumber(100, 600);
+    const unsigned int seenSignalTimes = test::randomNumber(100, 600);
     const unsigned int seenSignalSince = test::randomNumber(100, 600);
-    v2::Switch status(HIGH, false, seenSignalTimes, seenSignalSince);
+    v2::Switch status{.state = HIGH, .stateChanged = false, .seenSignalTimes = seenSignalTimes, .seenSignalSince = seenSignalSince};
 
     int durationIncrease = minSignalDurationMs / minIterations;
 
@@ -155,9 +154,9 @@ TEST_F(V2PushButtonSwitchServiceTest, DoesntChangeStateOnLow)
 
 TEST_F(V2PushButtonSwitchServiceTest, ResetChangeDetectionOnLow)
 {
-    const int seenSignalTimes = test::randomNumber(100, 600);
+    const unsigned int seenSignalTimes = test::randomNumber(100, 600);
     const unsigned int seenSignalSince = test::randomNumber(100, 600);
-    v2::Switch status(HIGH, true, seenSignalTimes, seenSignalSince);
+    v2::Switch status{.state = HIGH, .stateChanged = true, .seenSignalTimes = seenSignalTimes, seenSignalSince};
 
     int durationIncrease = minSignalDurationMs / minIterations;
 
@@ -174,7 +173,7 @@ TEST_F(V2PushButtonSwitchServiceTest, ResetChangeDetectionOnLow)
 
 TEST_F(V2ToggleButtonSwitchServiceTest, ChangeStateFromLowToHighWhenSeenHighSignalEnough)
 {
-    v2::Switch status;
+    v2::Switch status{};
 
     int durationIncrease = minSignalDurationMs / minIterations;
 
@@ -200,8 +199,7 @@ TEST_F(V2ToggleButtonSwitchServiceTest, ChangeStateFromLowToHighWhenSeenHighSign
 
 TEST_F(V2ToggleButtonSwitchServiceTest, KeepExistingState)
 {
-    v2::Switch status;
-
+    v2::Switch status{};
     status.state = test::randomNumber(0, 1);
 
     int durationIncrease = minSignalDurationMs / minIterations;

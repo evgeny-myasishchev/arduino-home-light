@@ -6,31 +6,23 @@ namespace v2
 #include <arduino-compat.h>
 #include <array-ptr.h>
 
+enum SwitchType
+{
+    Push = 0, // Will change state when switch pushed
+    // TODO
+    // PushOff = 1, // Same as Push but always do off
+    Toggle = 2, // Will keep exact state as switch state
+};
+
 struct Switch
 {
-public:
-    byte state = 0;
-    byte pendingState = 0;
-    bool stateChanged = false;
-    unsigned int seenSignalTimes = 0;
-    unsigned int seenSignalSince = 0;
-    
+    byte state;
+    byte pendingState;
+    bool stateChanged;
+    unsigned int seenSignalTimes;
+    unsigned int seenSignalSince;
+
     // ArrayPtr targetAddresses;
-
-    Switch() {}
-
-    Switch(
-        byte state,
-        bool stateChanged,
-        unsigned int seenSignalTimes,
-        unsigned int seenSignalSince)
-    {
-        this->state = state;
-        this->stateChanged = stateChanged;
-        this->state = state;
-        this->seenSignalTimes = seenSignalTimes;
-        this->seenSignalSince = seenSignalSince;
-    }
 };
 
 } // namespace v2
