@@ -16,6 +16,7 @@ enum SwitchType
 
 struct Switch
 {
+    SwitchType type;
     byte state;
     byte pendingState;
     bool stateChanged;
