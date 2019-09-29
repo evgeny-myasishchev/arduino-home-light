@@ -1,12 +1,11 @@
-#ifndef V2_PIN_BUS_H
-#define V2_PIN_BUS_H
+#ifndef V2_ARRAY_PTR_BUS_H
+#define V2_ARRAY_PTR_BUS_H
 
 #include <stdint.h>
 #include <stddef.h>
 
 namespace v2
 {
-
 
 template <typename T>
 class ArrayPtr
