@@ -32,17 +32,16 @@ void PushButtonSwitchService::processSignal(uint8_t signal, Switch *sw)
 
         if (sw->stateChanged)
         {
-            service_log("The state got already changed to %d", sw->currentState);
+            service_log("The state got already changed to %d", sw->state);
             return;
         }
 
         if (sw->seenSignalTimes >= cfg.minSignalIterations &&
             signalDuration >= cfg.minSignalDurationMs)
         {
-
             sw->stateChanged = true;
-            sw->currentState = sw->currentState == LOW ? HIGH : LOW;
-            service_log("State change detected. Signal duration: %d, new state: %d", signalDuration, sw->currentState);
+            sw->state = sw->state == LOW ? HIGH : LOW;
+            service_log("State change detected. Signal duration: %d, new state: %d", signalDuration, sw->state);
         }
     }
     else
@@ -78,7 +77,7 @@ void ToggleButtonSwitchService::processSignal(uint8_t signal, Switch *sw)
 
         if (sw->stateChanged)
         {
-            service_log("The state got already changed to %d", sw->currentState);
+            service_log("The state got already changed to %d", sw->state);
             return;
         }
 
@@ -87,8 +86,8 @@ void ToggleButtonSwitchService::processSignal(uint8_t signal, Switch *sw)
         {
 
             sw->stateChanged = true;
-            sw->currentState = HIGH;
-            service_log("State change detected. Signal duration: %d, new state: %d", signalDuration, sw->currentState);
+            sw->state = HIGH;
+            service_log("State change detected. Signal duration: %d, new state: %d", signalDuration, sw->state);
         }
     }
     else

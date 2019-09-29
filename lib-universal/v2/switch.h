@@ -9,7 +9,8 @@ namespace v2
 struct Switch
 {
 public:
-    uint8_t currentState = 0;
+    byte state = 0;
+    byte pendingState = 0;
     bool stateChanged = false;
     unsigned int seenSignalTimes = 0;
     unsigned int seenSignalSince = 0;
@@ -19,14 +20,14 @@ public:
     Switch() {}
 
     Switch(
-        uint8_t currentState,
+        byte state,
         bool stateChanged,
         unsigned int seenSignalTimes,
         unsigned int seenSignalSince)
     {
-        this->currentState = currentState;
+        this->state = state;
         this->stateChanged = stateChanged;
-        this->currentState = currentState;
+        this->state = state;
         this->seenSignalTimes = seenSignalTimes;
         this->seenSignalSince = seenSignalSince;
     }

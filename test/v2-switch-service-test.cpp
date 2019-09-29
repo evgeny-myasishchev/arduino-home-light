@@ -73,7 +73,7 @@ TEST_F(V2PushButtonSwitchServiceTest, ChangeStateHighWhenSeenSignalEnough)
     {
         svc->processSignal(HIGH, &status);
         EXPECT_FALSE(status.stateChanged) << "Should not have changed state";
-        EXPECT_EQ(status.currentState, LOW) << "Should not have toggled state";
+        EXPECT_EQ(status.state, LOW) << "Should not have toggled state";
         EXPECT_EQ(status.seenSignalSince, nowMillis) << "Should remember first time seen signal";
         EXPECT_EQ(status.seenSignalTimes, i + 1) << "Should increment seen times";
         fakeTimers.advance(durationIncrease);
@@ -84,7 +84,7 @@ TEST_F(V2PushButtonSwitchServiceTest, ChangeStateHighWhenSeenSignalEnough)
     fakeTimers.advance(durationIncrease);
     svc->processSignal(HIGH, &status);
     EXPECT_TRUE(status.stateChanged) << "Should have changed state";
-    EXPECT_EQ(status.currentState, HIGH) << "Should have HIGH value";
+    EXPECT_EQ(status.state, HIGH) << "Should have HIGH value";
     EXPECT_EQ(status.seenSignalTimes, minIterations + 1) << "Should increment seen times";
     EXPECT_EQ(status.seenSignalSince, nowMillis) << "Should remember first time seen signal";
 }
@@ -100,13 +100,13 @@ TEST_F(V2PushButtonSwitchServiceTest, DoesntChangeIfContinuingSeeingTheSignal)
         svc->processSignal(HIGH, &status);
         fakeTimers.advance(durationIncrease);
     }
-    EXPECT_EQ(status.currentState, HIGH) << "Should have HIGH value";
+    EXPECT_EQ(status.state, HIGH) << "Should have HIGH value";
 
     for (int i = 0; i < minIterations * 3; i++)
     {
         svc->processSignal(HIGH, &status);
         fakeTimers.advance(durationIncrease);
-        EXPECT_EQ(status.currentState, HIGH) << "Should stay HIGH after change";
+        EXPECT_EQ(status.state, HIGH) << "Should stay HIGH after change";
     }
 }
 
@@ -120,7 +120,7 @@ TEST_F(V2PushButtonSwitchServiceTest, ChangeStateLowWhenSeenSignalEnough)
     {
         svc->processSignal(HIGH, &status);
         EXPECT_FALSE(status.stateChanged) << "Should not have changed state";
-        EXPECT_EQ(status.currentState, HIGH) << "Should not have toggled state";
+        EXPECT_EQ(status.state, HIGH) << "Should not have toggled state";
         EXPECT_EQ(status.seenSignalSince, nowMillis) << "Should remember first time seen signal";
         EXPECT_EQ(status.seenSignalTimes, i + 1) << "Should increment seen times";
         fakeTimers.advance(durationIncrease);
@@ -131,7 +131,7 @@ TEST_F(V2PushButtonSwitchServiceTest, ChangeStateLowWhenSeenSignalEnough)
     fakeTimers.advance(durationIncrease);
     svc->processSignal(HIGH, &status);
     EXPECT_TRUE(status.stateChanged) << "Should have changed state";
-    EXPECT_EQ(status.currentState, LOW) << "Should have HIGH value";
+    EXPECT_EQ(status.state, LOW) << "Should have HIGH value";
     EXPECT_EQ(status.seenSignalTimes, minIterations + 1) << "Should increment seen times";
     EXPECT_EQ(status.seenSignalSince, nowMillis) << "Should remember first time seen signal";
 }
@@ -148,7 +148,7 @@ TEST_F(V2PushButtonSwitchServiceTest, DoesntChangeStateOnLow)
     {
         svc->processSignal(LOW, &status);
         EXPECT_FALSE(status.stateChanged) << "Should not have changed state";
-        EXPECT_EQ(status.currentState, HIGH) << "Should not have toggled state";
+        EXPECT_EQ(status.state, HIGH) << "Should not have toggled state";
         fakeTimers.advance(durationIncrease);
     }
 }
@@ -165,7 +165,7 @@ TEST_F(V2PushButtonSwitchServiceTest, ResetChangeDetectionOnLow)
     {
         svc->processSignal(LOW, &status);
         EXPECT_FALSE(status.stateChanged) << "Should reset stateChanged flag";
-        EXPECT_EQ(status.currentState, HIGH) << "Should keep currentState";
+        EXPECT_EQ(status.state, HIGH) << "Should keep currentState";
         EXPECT_EQ(status.seenSignalTimes, 0) << "Should reset seen signal times";
         EXPECT_EQ(status.seenSignalSince, 0) << "Should reset seen signal since";
         fakeTimers.advance(durationIncrease);
@@ -182,7 +182,7 @@ TEST_F(V2ToggleButtonSwitchServiceTest, ChangeStateFromLowToHighWhenSeenSignalEn
     {
         svc->processSignal(HIGH, &status);
         EXPECT_FALSE(status.stateChanged) << "Should not have changed state";
-        EXPECT_EQ(status.currentState, LOW) << "Should not have toggled state";
+        EXPECT_EQ(status.state, LOW) << "Should not have toggled state";
         EXPECT_EQ(status.seenSignalSince, nowMillis) << "Should remember first time seen signal";
         EXPECT_EQ(status.seenSignalTimes, i + 1) << "Should increment seen times";
         fakeTimers.advance(durationIncrease);
@@ -195,7 +195,7 @@ TEST_F(V2ToggleButtonSwitchServiceTest, ChangeStateFromLowToHighWhenSeenSignalEn
         fakeTimers.advance(durationIncrease);
         svc->processSignal(HIGH, &status);
         EXPECT_TRUE(status.stateChanged) << "Should have changed state";
-        EXPECT_EQ(status.currentState, HIGH) << "Should have HIGH value";
+        EXPECT_EQ(status.state, HIGH) << "Should have HIGH value";
         EXPECT_EQ(status.seenSignalTimes, minIterations + i + 1) << "Should increment seen times";
         EXPECT_EQ(status.seenSignalSince, nowMillis) << "Should remember first time seen signal";
     }
@@ -205,7 +205,7 @@ TEST_F(V2ToggleButtonSwitchServiceTest, KeepStateHigh)
 {
     v2::Switch status;
 
-    status.currentState = HIGH;
+    status.state = HIGH;
 
     int durationIncrease = minSignalDurationMs / minIterations;
 
@@ -213,7 +213,7 @@ TEST_F(V2ToggleButtonSwitchServiceTest, KeepStateHigh)
     {
         svc->processSignal(HIGH, &status);
         EXPECT_FALSE(status.stateChanged) << "Should not have changed state";
-        EXPECT_EQ(status.currentState, HIGH) << "Should not have toggled state";
+        EXPECT_EQ(status.state, HIGH) << "Should not have toggled state";
         fakeTimers.advance(durationIncrease);
     }
 
@@ -224,7 +224,7 @@ TEST_F(V2ToggleButtonSwitchServiceTest, KeepStateHigh)
         fakeTimers.advance(durationIncrease);
         svc->processSignal(HIGH, &status);
         EXPECT_TRUE(status.stateChanged) << "Should have changed state";
-        EXPECT_EQ(status.currentState, HIGH) << "Should have HIGH value";
+        EXPECT_EQ(status.state, HIGH) << "Should have HIGH value";
     }
 }
 
@@ -232,7 +232,7 @@ TEST_F(V2ToggleButtonSwitchServiceTest, applyStateChangeShouldReset)
 {
     v2::Switch status;
 
-    status.currentState = HIGH;
+    status.state = HIGH;
     status.stateChanged = true;
     status.seenSignalTimes = test::randomNumber(100, 600);
     status.seenSignalSince = test::randomNumber(100, 600);
