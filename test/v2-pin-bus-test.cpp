@@ -2,36 +2,10 @@
 #include <arduino-compat.h>
 #include "test-lib/random.h"
 #include <pin-bus.h>
+#include "test-lib/test-pin-bus.h"
 
 namespace
 {
-
-class TestPinBus : public v2::PinBus
-{
-
-public:
-    byte *pendingTestState;
-
-    TestPinBus(const byte busSize) : PinBus(busSize)
-    {
-    }
-
-    void readState()
-    {
-        for (size_t i = 0; i < this->getBusSize(); i++)
-        {
-            this->setStateByte(i, pendingTestState[i]);
-        }
-    }
-
-    void writeState()
-    {
-        for (size_t i = 0; i < this->getBusSize(); i++)
-        {
-            pendingTestState[i] = this->getStateByte(i);
-        }
-    }
-};
 
 TEST(V2PinBus, initialState)
 {
