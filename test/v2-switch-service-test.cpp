@@ -172,7 +172,7 @@ TEST_F(V2PushButtonSwitchServiceTest, ResetChangeDetectionOnLow)
     }
 }
 
-TEST_F(V2ToggleButtonSwitchServiceTest, ChangeStateFromLowToHighWhenSeenSignalEnough)
+TEST_F(V2ToggleButtonSwitchServiceTest, ChangeStateFromLowToHighWhenSeenHighSignalEnough)
 {
     v2::Switch status;
 
@@ -190,42 +190,57 @@ TEST_F(V2ToggleButtonSwitchServiceTest, ChangeStateFromLowToHighWhenSeenSignalEn
 
     logger_log("TEST: Completed minIterations stage");
 
-    for (size_t i = 0; i < minIterations * 3; i++)
-    {
-        fakeTimers.advance(durationIncrease);
-        svc->processSignal(HIGH, &status);
-        EXPECT_TRUE(status.stateChanged) << "Should have changed state";
-        EXPECT_EQ(status.state, HIGH) << "Should have HIGH value";
-        EXPECT_EQ(status.seenSignalTimes, minIterations + i + 1) << "Should increment seen times";
-        EXPECT_EQ(status.seenSignalSince, nowMillis) << "Should remember first time seen signal";
-    }
+    fakeTimers.advance(durationIncrease);
+    svc->processSignal(HIGH, &status);
+    EXPECT_TRUE(status.stateChanged) << "Should have changed state";
+    EXPECT_EQ(status.state, HIGH) << "Should have HIGH value";
+    EXPECT_EQ(status.seenSignalTimes, minIterations + 1) << "Should increment seen times";
+    EXPECT_EQ(status.seenSignalSince, nowMillis) << "Should remember first time seen signal";
 }
 
-TEST_F(V2ToggleButtonSwitchServiceTest, KeepStateHigh)
+TEST_F(V2ToggleButtonSwitchServiceTest, KeepExistingState)
 {
     v2::Switch status;
 
+    status.state = test::randomNumber(0, 1);
+
+    int durationIncrease = minSignalDurationMs / minIterations;
+
+    for (int i = 0; i < minIterations * 3; i++)
+    {
+        svc->processSignal(status.state, &status);
+        EXPECT_FALSE(status.stateChanged) << "Should not have changed state";
+        EXPECT_EQ(status.state, status.state) << "Should not have toggled state";
+        fakeTimers.advance(durationIncrease);
+    }
+}
+
+TEST_F(V2ToggleButtonSwitchServiceTest, ChangeStateFromHighToLowWhenSeenLowSignalEnough)
+{
+    v2::Switch status;
     status.state = HIGH;
+    status.pendingState = HIGH;
 
     int durationIncrease = minSignalDurationMs / minIterations;
 
     for (int i = 0; i < minIterations; i++)
     {
-        svc->processSignal(HIGH, &status);
+        svc->processSignal(LOW, &status);
         EXPECT_FALSE(status.stateChanged) << "Should not have changed state";
         EXPECT_EQ(status.state, HIGH) << "Should not have toggled state";
+        EXPECT_EQ(status.seenSignalSince, nowMillis) << "Should remember first time seen signal";
+        EXPECT_EQ(status.seenSignalTimes, i + 1) << "Should increment seen times";
         fakeTimers.advance(durationIncrease);
     }
 
     logger_log("TEST: Completed minIterations stage");
 
-    for (size_t i = 0; i < minIterations * 3; i++)
-    {
-        fakeTimers.advance(durationIncrease);
-        svc->processSignal(HIGH, &status);
-        EXPECT_TRUE(status.stateChanged) << "Should have changed state";
-        EXPECT_EQ(status.state, HIGH) << "Should have HIGH value";
-    }
+    fakeTimers.advance(durationIncrease);
+    svc->processSignal(LOW, &status);
+    EXPECT_TRUE(status.stateChanged) << "Should have changed state";
+    EXPECT_EQ(status.state, LOW) << "Should have HIGH value";
+    EXPECT_EQ(status.seenSignalTimes, minIterations + 1) << "Should increment seen times";
+    EXPECT_EQ(status.seenSignalSince, nowMillis) << "Should remember first time seen signal";
 }
 
 TEST_F(V2ToggleButtonSwitchServiceTest, applyStateChangeShouldReset)

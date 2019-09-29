@@ -60,41 +60,35 @@ ToggleButtonSwitchService::ToggleButtonSwitchService(SwitchServiceConfig cfg) : 
 {
 }
 
-void ToggleButtonSwitchService::processSignal(uint8_t signal, Switch *sw)
+void ToggleButtonSwitchService::processSignal(byte signal, Switch *sw)
 {
+    unsigned long now = cfg.timers->millis();
+    if(sw->state == signal) {
+        return;
+    }
+
     service_log("Processing signal %d, seen times: %d, since: %d", signal, sw->seenSignalTimes, sw->seenSignalSince);
-    if (signal == HIGH)
+    if (sw->pendingState == signal)
     {
         sw->seenSignalTimes += 1;
-        unsigned long now = cfg.timers->millis();
-        if (sw->seenSignalSince == 0)
-        {
-            service_log("Seen signal for a first time, now is: %d", now);
-            sw->seenSignalSince = now;
-        };
 
         const unsigned int signalDuration = now - sw->seenSignalSince;
-
-        if (sw->stateChanged)
-        {
-            service_log("The state got already changed to %d", sw->state);
-            return;
-        }
 
         if (sw->seenSignalTimes >= cfg.minSignalIterations &&
             signalDuration >= cfg.minSignalDurationMs)
         {
 
             sw->stateChanged = true;
-            sw->state = HIGH;
+            sw->state = signal;
             service_log("State change detected. Signal duration: %d, new state: %d", signalDuration, sw->state);
         }
     }
     else
     {
-        sw->stateChanged = false;
-        sw->seenSignalTimes = 0;
-        sw->seenSignalSince = 0;
+        service_log("Seen %d signal for a first time, now is: %d", signal, now);
+        sw->seenSignalSince = now;
+        sw->seenSignalTimes = 1;
+        sw->pendingState = signal;
     }
 }
 
