@@ -29,6 +29,17 @@ void SwitchesRouter::processRoutes(ArrayPtr<Switch *> routes)
             const auto switchState = this->services.bus->getPin(sw->switchAddress);
             router_log("Processing switch: %d, address: %d, state: %d", i, sw->switchAddress, switchState);
             swSvc->processSignal(switchState, sw);
+            if (sw->stateChanged)
+            {
+                router_log("Route %d status changed to %d", i, sw->state);
+                for (byte addrNum = 0; addrNum < sw->targetAddresses.size(); addrNum++)
+                {
+                    const auto address = sw->targetAddresses[addrNum];
+                    router_log("Set %d state to %d address (addr num %d)", sw->state, address, addrNum);
+                    this->services.bus->setPin(address, sw->state);
+                }
+                swSvc->applyStateChange(sw);
+            }
         }
         else
         {

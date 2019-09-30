@@ -10,6 +10,7 @@ namespace
 {
 
 using namespace v2;
+using namespace testing;
 
 class MockSwitchService : public SwitchService
 {
@@ -72,6 +73,52 @@ TEST_F(V2SwitchesRouterTest, processRoutesNoChanges)
     EXPECT_CALL((*toggleBtnSwitchSvc), processSignal(bitRead(state, route5.switchAddress), &route5));
 
     router->processRoutes(routes);
+}
+
+void markSwitchChanged(byte signal, Switch *sw)
+{
+    sw->state = signal;
+    sw->stateChanged = true;
+}
+
+TEST_F(V2SwitchesRouterTest, processRoutesWithChanges)
+{
+    const byte state = 0b00000101;
+    bus->pendingTestState[0] = state;
+    bus->readState();
+
+    byte route1Targets[] = {8, 9};
+    Switch route1{.switchAddress = 0,
+                  .targetAddresses = ArrayPtr<byte>(2, (byte *)&route1Targets)};
+    Switch route2{.switchAddress = 1};
+    byte route3Targets[] = {12, 13};
+    Switch route3{
+        .switchAddress = 2,
+        .targetAddresses = ArrayPtr<byte>(2, (byte *)&route3Targets),
+        .type = SwitchType::Toggle};
+    Switch route4{.switchAddress = 3};
+    Switch route5{.switchAddress = 4, .type = SwitchType::Toggle};
+    Switch *routesArray[] = {&route1, &route4, &route2, &route3, &route5};
+    ArrayPtr<Switch *> routes(5, (Switch **)&routesArray);
+
+    EXPECT_CALL((*pushBtnSwitchSvc), processSignal(bitRead(state, route1.switchAddress), &route1))
+        .WillOnce(Invoke(markSwitchChanged));
+    EXPECT_CALL((*pushBtnSwitchSvc), applyStateChange(&route1));
+
+    EXPECT_CALL((*pushBtnSwitchSvc), processSignal(bitRead(state, route2.switchAddress), &route2));
+
+    EXPECT_CALL((*toggleBtnSwitchSvc), processSignal(bitRead(state, route3.switchAddress), &route3))
+        .WillOnce(Invoke(markSwitchChanged));
+    EXPECT_CALL((*toggleBtnSwitchSvc), applyStateChange(&route3));
+
+    EXPECT_CALL((*pushBtnSwitchSvc), processSignal(bitRead(state, route4.switchAddress), &route4));
+    EXPECT_CALL((*toggleBtnSwitchSvc), processSignal(bitRead(state, route5.switchAddress), &route5));
+
+    router->processRoutes(routes);
+
+    bus->writeState();
+
+    EXPECT_EQ(bus->pendingTestState[1], 0b00110011);
 }
 
 } // namespace

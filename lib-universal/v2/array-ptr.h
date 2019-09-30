@@ -15,6 +15,12 @@ private:
     T *_array;
 
 public:
+    ArrayPtr()
+    {
+        _size = 0;
+        _array = NULL;
+    };
+
     ArrayPtr(size_t size, T *array)
     {
         _size = size;

@@ -1,10 +1,11 @@
 #ifndef V2_SWITCH
 #define V2_SWITCH
 
-namespace v2
-{
 #include <arduino-compat.h>
 #include <array-ptr.h>
+
+namespace v2
+{
 
 enum SwitchType
 {
@@ -24,7 +25,7 @@ struct Switch
     unsigned int seenSignalSince;
 
     byte switchAddress;
-    // ArrayPtr targetAddresses;
+    ArrayPtr<byte> targetAddresses;
 };
 
 } // namespace v2
