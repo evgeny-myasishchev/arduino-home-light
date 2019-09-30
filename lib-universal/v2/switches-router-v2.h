@@ -8,6 +8,12 @@
 namespace v2
 {
 
+#ifdef SWITCH_ROUTER_VERBOSE
+#define router_log logger_log
+#else
+#define router_log
+#endif
+
 struct SwitchRouterServices
 {
     PinBus *bus;
@@ -17,6 +23,8 @@ struct SwitchRouterServices
 
 class SwitchesRouter
 {
+private:
+    SwitchRouterServices services;
 public:
     SwitchesRouter(SwitchRouterServices);
     void processRoutes(ArrayPtr<Switch *> routes);

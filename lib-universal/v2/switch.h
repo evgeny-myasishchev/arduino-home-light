@@ -23,6 +23,7 @@ struct Switch
     unsigned int seenSignalTimes;
     unsigned int seenSignalSince;
 
+    byte switchAddress;
     // ArrayPtr targetAddresses;
 };
 

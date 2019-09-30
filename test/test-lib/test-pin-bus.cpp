@@ -12,6 +12,7 @@ void TestPinBus::readState()
 {
     for (size_t i = 0; i < this->getBusSize(); i++)
     {
+        logger_log("Reading test pin bus state byte: %d, value: %d", i, pendingTestState[i]);
         this->setStateByte(i, pendingTestState[i]);
     }
 }
