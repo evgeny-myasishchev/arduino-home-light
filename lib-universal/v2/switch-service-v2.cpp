@@ -11,6 +11,10 @@ SwitchService::SwitchService(SwitchServiceConfig cfg)
                cfg.minSignalIterations);
 }
 
+SwitchService::~SwitchService()
+{
+}
+
 PushButtonSwitchService::PushButtonSwitchService(SwitchServiceConfig cfg) : SwitchService(cfg)
 {
 }

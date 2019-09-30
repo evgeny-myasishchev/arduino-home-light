@@ -48,7 +48,8 @@ protected:
 
 public:
     SwitchService(SwitchServiceConfig cfg);
-    virtual void processSignal(uint8_t signal, Switch *sw) = 0;
+    virtual ~SwitchService();
+    virtual void processSignal(byte signal, Switch *sw) = 0;
     virtual void applyStateChange(Switch *sw) = 0;
 };
 

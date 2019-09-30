@@ -9,6 +9,7 @@ public:
     byte *pendingTestState;
 
     TestPinBus(const byte busSize);
+    ~TestPinBus();
     void readState();
     void writeState();
 };

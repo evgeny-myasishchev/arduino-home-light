@@ -4,6 +4,10 @@ TestPinBus::TestPinBus(const byte busSize) : PinBus(busSize)
 {
 }
 
+TestPinBus::~TestPinBus()
+{
+}
+
 void TestPinBus::readState()
 {
     for (size_t i = 0; i < this->getBusSize(); i++)

@@ -25,7 +25,7 @@ protected:
 
 public:
     PinBus(const byte busSize);
-    ~PinBus();
+    virtual ~PinBus();
     const byte getPin(const byte pinIndex) const;
     const void setPin(const byte pinIndex, byte state);
 
