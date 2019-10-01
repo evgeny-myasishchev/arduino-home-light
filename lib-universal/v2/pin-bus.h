@@ -51,6 +51,9 @@ private:
     byte inputBoardsNum;
 
     PCF8574 **boards;
+
+    // Used mostly to reduce logging noise
+    byte *prevBusState;
 public:
     PCF8574Bus(const byte outputBoardsNum, const byte inputBoardsNum);
     ~PCF8574Bus();

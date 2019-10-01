@@ -17,17 +17,17 @@ ArrayPtr<Switch *> routes = createRoutes();
 
 void setup()
 {
-    Serial.begin(9600);
+    Serial.begin(115200);
     while (!Serial)
     {
     }
     logger_setup(&Serial);
 
-    router = new SwitchesRouter(SwitchRouterServices{
-        .bus = &bus,
-        .pushBtnSwitchSvc = new PushButtonSwitchService(SwitchServiceConfig()),
-        .toggleBtnSwitchSvc = new ToggleButtonSwitchService(SwitchServiceConfig()),
-    });
+    // router = new SwitchesRouter(SwitchRouterServices{
+    //     .bus = &bus,
+    //     .pushBtnSwitchSvc = new PushButtonSwitchService(SwitchServiceConfig()),
+    //     .toggleBtnSwitchSvc = new ToggleButtonSwitchService(SwitchServiceConfig()),
+    // });
 
     bus.setup(0xFF);
 
@@ -38,28 +38,27 @@ void loop()
 {
     bus.readState();
 
-    router->processRoutes(routes);
+    // router->processRoutes(routes);
 
-    // for (size_t relayIndex = 0; relayIndex < RELAY_BOARDS; relayIndex++)
-    // {
-    //     for (size_t bit = 0; bit < 8; bit++)
-    //     {
-    //         const byte relayAddress = relayIndex * 8 + bit;
-    //         const byte relaySwitchAddress = RELAY_BOARDS * 8 + relayAddress;
-    //         const auto relaySwitchState = bus.getPin(relaySwitchAddress);
-    //         bus.setPin(relayIndex * 8 + bit, relaySwitchState);
-    //     }
-    // }
+    for (size_t relayIndex = 0; relayIndex < RELAY_BOARDS; relayIndex++)
+    {
+        for (size_t bit = 0; bit < 8; bit++)
+        {
+            const byte relayAddress = relayIndex * 8 + bit;
+            const byte relaySwitchAddress = RELAY_BOARDS * 8 + relayAddress;
+            const auto relaySwitchState = bus.getPin(relaySwitchAddress);
+            bus.setPin(relayIndex * 8 + bit, relaySwitchState);
+        }
+    }
 
-    // const byte switchAllState = bus.getPin((RELAY_BOARDS + INPUT_BOARDS - 1) * 8);
-    // if(switchAllState == LOW)
-    // {
-    //     logger_log("Got signal from all switch");
-    //     for (size_t i = 0; i < RELAY_BOARDS * 8; i++)
-    //     {
-    //         bus.setPin(i, LOW);
-    //     }
-    // }
+    const byte switchAllState = bus.getPin((RELAY_BOARDS + INPUT_BOARDS - 1) * 8);
+    if(switchAllState == LOW)
+    {
+        for (size_t i = 0; i < RELAY_BOARDS * 8; i++)
+        {
+            bus.setPin(i, LOW);
+        }
+    }
 
     bus.writeState();
 }

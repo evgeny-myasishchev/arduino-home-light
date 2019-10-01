@@ -75,10 +75,14 @@ PCF8574Bus::PCF8574Bus(const byte outputBoardsNum, const byte inputBoardsNum)
         const auto boardAddr = initialAddress++;
         boards[i] = new PCF8574(boardAddr);
     }
+
+    // Skip init to have initial values logged
+    prevBusState = new byte[busSize];
 }
 
 PCF8574Bus::~PCF8574Bus()
 {
+    delete prevBusState;
     delete boards;
 }
 
@@ -91,22 +95,32 @@ void PCF8574Bus::setup(const byte initialState)
     pin_bus_log("Initializing %d bus boards. Initial state: %d", this->getBusSize(), initialState);
 }
 
-void PCF8574Bus::readState() 
+void PCF8574Bus::readState()
 {
     for (size_t i = 0; i < this->getBusSize(); i++)
     {
         const auto byteValue = boards[i]->read8();
         this->setStateByte(i, byteValue);
-        pin_bus_log("Loaded board byte: %d, value: %b", i, byteValue);
+        if (this->prevBusState[i] != byteValue)
+        {
+            pin_bus_log("Loaded board byte: %d, value: %b", i, byteValue);
+        }
+        this->prevBusState[i] = byteValue;
     }
 }
 
-void PCF8574Bus::writeState() 
+void PCF8574Bus::writeState()
 {
     // Write only to outputs. Inputs should stay high so we could get a signal
     for (size_t i = 0; i < outputBoardsNum; i++)
     {
-        boards[i]->write8(this->getStateByte(i));
+        const auto byteValue = this->getStateByte(i);
+        if (this->prevBusState[i] != byteValue)
+        {
+            pin_bus_log("Write board byte: %d, value: %b", i, byteValue);
+        }
+        boards[i]->write8(byteValue);
+        this->prevBusState[i] = byteValue;
     }
 }
 
