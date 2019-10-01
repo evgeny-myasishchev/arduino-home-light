@@ -4,7 +4,8 @@
 #include <switch-service-v2.h>
 #include <switches-router-v2.h>
 
-#include "test-routes.h"
+// #include "routes/test-routes.h"
+#include "routes/fl-2-routes.h"
 
 using namespace v2;
 
@@ -12,7 +13,7 @@ PCF8574Bus bus(RELAY_BOARDS, INPUT_BOARDS);
 
 SwitchesRouter *router;
 
-ArrayPtr<Switch *> routes = createTestRoutes(RELAY_BOARDS, INPUT_BOARDS);
+ArrayPtr<Switch *> routes = createRoutes();
 
 void setup()
 {
