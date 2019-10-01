@@ -26,6 +26,18 @@ struct Switch
 
     byte switchAddress;
     ArrayPtr<byte> targetAddresses;
+
+    Switch *withSwitchAddress(byte addr)
+    {
+        this->switchAddress = addr;
+        return this;
+    }
+
+    Switch *withTargetAddresses(byte size, byte* addresses)
+    {
+        this->targetAddresses = ArrayPtr<byte>(size, addresses);
+        return this;
+    }
 };
 
 } // namespace v2
