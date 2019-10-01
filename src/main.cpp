@@ -4,6 +4,9 @@
 #include <switch-service-v2.h>
 #include <switches-router-v2.h>
 
+// Test mode will only use pin bus, see below
+#define TEST_MODE
+
 // #include "routes/test-routes.h"
 #include "routes/fl-2-routes.h"
 
@@ -23,11 +26,11 @@ void setup()
     }
     logger_setup(&Serial);
 
-    // router = new SwitchesRouter(SwitchRouterServices{
-    //     .bus = &bus,
-    //     .pushBtnSwitchSvc = new PushButtonSwitchService(SwitchServiceConfig()),
-    //     .toggleBtnSwitchSvc = new ToggleButtonSwitchService(SwitchServiceConfig()),
-    // });
+    router = new SwitchesRouter(SwitchRouterServices{
+        .bus = &bus,
+        .pushBtnSwitchSvc = new PushButtonSwitchService(SwitchServiceConfig()),
+        .toggleBtnSwitchSvc = new ToggleButtonSwitchService(SwitchServiceConfig()),
+    });
 
     bus.setup(0xFF);
 
@@ -38,7 +41,11 @@ void loop()
 {
     bus.readState();
 
-    // router->processRoutes(routes);
+    #ifndef TEST_MODE
+
+    router->processRoutes(routes);
+
+    #else
 
     for (size_t relayIndex = 0; relayIndex < RELAY_BOARDS; relayIndex++)
     {
@@ -59,6 +66,8 @@ void loop()
             bus.setPin(i, LOW);
         }
     }
+
+    #endif
 
     bus.writeState();
 }
