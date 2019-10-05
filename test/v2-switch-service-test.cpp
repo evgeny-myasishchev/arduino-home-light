@@ -255,6 +255,16 @@ TEST_F(V2ToggleButtonSwitchServiceTest, ChangeStateFromHighToLowWhenSeenLowSigna
     EXPECT_EQ(status.seenSignalSince, nowMillis) << "Should remember first time seen signal";
 }
 
+TEST_F(V2ToggleButtonSwitchServiceTest, getTargetStateUseSwitchState)
+{
+    v2::Switch status{.state = HIGH};
+    EXPECT_EQ(svc->getTargetState(HIGH, &status), HIGH) << "Should use switch state";;
+    EXPECT_EQ(svc->getTargetState(LOW, &status), HIGH) << "Should use switch state";;
+    status.state = LOW;
+    EXPECT_EQ(svc->getTargetState(HIGH, &status), LOW) << "Should use switch state";;
+    EXPECT_EQ(svc->getTargetState(LOW, &status), LOW) << "Should use switch state";;
+}
+
 TEST_F(V2ToggleButtonSwitchServiceTest, applyStateChangeShouldReset)
 {
     v2::Switch status;

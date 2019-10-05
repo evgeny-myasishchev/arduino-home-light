@@ -108,7 +108,7 @@ void ToggleButtonSwitchService::processSignal(byte signal, Switch *sw)
 
 byte ToggleButtonSwitchService::getTargetState(byte currentValue, Switch *sw)
 {
-    return 0;
+    return sw->state;
 }
 
 void ToggleButtonSwitchService::applyStateChange(Switch *sw)
