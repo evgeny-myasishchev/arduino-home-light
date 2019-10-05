@@ -27,7 +27,7 @@ void SwitchesRouter::processRoutes(ArrayPtr<Switch *> routes)
         if (swSvc != NULL)
         {
             const auto switchState = this->services.bus->getPin(sw->switchAddress);
-            router_log("Processing switch: %d, address: %d, state: %d", i, sw->switchAddress, switchState);
+            // router_log("Processing switch: %d, address: %d, state: %d", i, sw->switchAddress, switchState);
             swSvc->processSignal(switchState, sw);
             if (sw->stateChanged)
             {
