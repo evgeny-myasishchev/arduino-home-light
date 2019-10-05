@@ -27,6 +27,12 @@ struct Switch
     byte switchAddress;
     ArrayPtr<byte> targetAddresses;
 
+    Switch *withSwitchType(SwitchType type)
+    {
+        this->type = type;
+        return this;
+    }
+
     Switch *withSwitchAddress(byte addr)
     {
         this->switchAddress = addr;
