@@ -171,6 +171,20 @@ TEST_F(V2PushButtonSwitchServiceTest, ResetChangeDetectionOnLow)
     }
 }
 
+TEST_F(V2PushButtonSwitchServiceTest, getTargetStateToggleIfHigh)
+{
+    v2::Switch status{.state = HIGH};
+    EXPECT_EQ(svc->getTargetState(HIGH, &status), LOW) << "Should toggle HIGH to LOW";
+    EXPECT_EQ(svc->getTargetState(LOW, &status), HIGH) << "Should toggle LOW to HIGH";
+}
+
+TEST_F(V2PushButtonSwitchServiceTest, getTargetStatePassIfLow)
+{
+    v2::Switch status{.state = LOW};
+    EXPECT_EQ(svc->getTargetState(HIGH, &status), HIGH) << "Should pass state as is";
+    EXPECT_EQ(svc->getTargetState(LOW, &status), LOW) << "Should pass state as is";
+}
+
 TEST_F(V2ToggleButtonSwitchServiceTest, ChangeStateFromLowToHighWhenSeenHighSignalEnough)
 {
     v2::Switch status{};

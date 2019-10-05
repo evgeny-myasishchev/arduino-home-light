@@ -58,7 +58,11 @@ void PushButtonSwitchService::processSignal(uint8_t signal, Switch *sw)
 
 byte PushButtonSwitchService::getTargetState(byte currentValue, Switch *sw)
 {
-    return 0;
+    if(sw->state == HIGH)
+    {
+        return currentValue == HIGH ? LOW : HIGH;
+    }
+    return currentValue;
 }
 
 void PushButtonSwitchService::applyStateChange(Switch *aSwitch)
