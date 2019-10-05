@@ -4,16 +4,14 @@
 // To disable define this somewhere before including logger.h
 // #ifndef DISABLE_LOGGING
 
-#ifdef ARDUINO
-#include <Print.h>
-#endif
-
+#include <arduino-compat.h>
 #include <stdarg.h>
 #include <Timers.h>
 
 namespace logger
 {
     #define DEC 10
+    #define BIN 2
 
     class Output
     {

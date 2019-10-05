@@ -1,9 +1,9 @@
-PIO_USER_LIBS_HOME=.piolibdeps
+PIO_USER_LIBS_HOME=.pio/libdeps/universal
 PIO_HOME := $(HOME)/.platformio
 FRAMEWORK_DIR := $(PIO_HOME)/packages/framework-arduinoavr
 
 CXX := g++
-CXXFLAGS := -g -std=gnu++11 -D UNIVERSAL -D SWITCH_SERVICE_VERBOSE
+CXXFLAGS := -g -std=gnu++11 -D UNIVERSAL -D SWITCH_SERVICE_VERBOSE -D SWITCH_ROUTER_VERBOSE
 LDFLAGS  := -L/usr/lib -lstdc++ -lm
 BUILD := build
 OBJ_DIR := $(BUILD)/objects

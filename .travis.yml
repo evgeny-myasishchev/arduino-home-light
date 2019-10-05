@@ -1,4 +1,4 @@
-dist: xenial
+dist: bionic
 language: python
 python:
     - "2.7"
@@ -6,11 +6,12 @@ python:
 sudo: false
 cache:
     directories:
-        - "~/.platformio"
+        - "~/.pio"
 
 install:
     - pip install -U platformio
 
 script:
+    - g++ -v
     - pio run -e universal
     - make test

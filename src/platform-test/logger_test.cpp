@@ -46,8 +46,8 @@ test(logger_printf)
 test(logger_printf_serial)
 {
     logger::PrintOutput out(&Serial);
-    logger::printf(&out, "Actual output - String with params: %s, %s, %d, %i\n", "str1", "str2", 10, 20);
-    Serial.println("Expected output - String with params: str1, str2, 10, 20");
+    logger::printf(&out, "Actual output - String with params: %s, %s, %d, %i, %b\n", "str1", "str2", 10, 20, 15);
+    Serial.println("Expected output - String with params: str1, str2, 10, 20, 1111");
     Serial.println("Please compare manually");
 }
 
