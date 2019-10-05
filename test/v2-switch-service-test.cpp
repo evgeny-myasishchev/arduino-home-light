@@ -73,6 +73,7 @@ TEST_F(V2PushButtonSwitchServiceTest, ChangeStateHighWhenSeenSignalEnough)
         svc->processSignal(HIGH, &status);
         EXPECT_FALSE(status.stateChanged) << "Should not have changed state";
         EXPECT_EQ(status.state, LOW) << "Should not have toggled state";
+        EXPECT_EQ(status.pendingState, LOW) << "Should not have toggled pending state";
         EXPECT_EQ(status.seenSignalSince, nowMillis) << "Should remember first time seen signal";
         EXPECT_EQ(status.seenSignalTimes, i + 1) << "Should increment seen times";
         fakeTimers.advance(durationIncrease);
@@ -109,49 +110,6 @@ TEST_F(V2PushButtonSwitchServiceTest, DoesntChangeIfContinuingSeeingTheSignal)
     }
 }
 
-TEST_F(V2PushButtonSwitchServiceTest, ChangeStateLowWhenSeenSignalEnough)
-{
-    v2::Switch status{.state = HIGH, .stateChanged = false, .seenSignalTimes = 0, .seenSignalSince = 0};
-
-    int durationIncrease = minSignalDurationMs / minIterations;
-
-    for (int i = 0; i < minIterations; i++)
-    {
-        svc->processSignal(HIGH, &status);
-        EXPECT_FALSE(status.stateChanged) << "Should not have changed state";
-        EXPECT_EQ(status.state, HIGH) << "Should not have toggled state";
-        EXPECT_EQ(status.seenSignalSince, nowMillis) << "Should remember first time seen signal";
-        EXPECT_EQ(status.seenSignalTimes, i + 1) << "Should increment seen times";
-        fakeTimers.advance(durationIncrease);
-    }
-
-    logger_log("TEST: Completed minIterations stage");
-
-    fakeTimers.advance(durationIncrease);
-    svc->processSignal(HIGH, &status);
-    EXPECT_TRUE(status.stateChanged) << "Should have changed state";
-    EXPECT_EQ(status.state, LOW) << "Should have HIGH value";
-    EXPECT_EQ(status.seenSignalTimes, minIterations + 1) << "Should increment seen times";
-    EXPECT_EQ(status.seenSignalSince, nowMillis) << "Should remember first time seen signal";
-}
-
-TEST_F(V2PushButtonSwitchServiceTest, DoesntChangeStateOnLow)
-{
-    const unsigned int seenSignalTimes = test::randomNumber(100, 600);
-    const unsigned int seenSignalSince = test::randomNumber(100, 600);
-    v2::Switch status{.state = HIGH, .stateChanged = false, .seenSignalTimes = seenSignalTimes, .seenSignalSince = seenSignalSince};
-
-    int durationIncrease = minSignalDurationMs / minIterations;
-
-    for (int i = 0; i < minIterations * 3; i++)
-    {
-        svc->processSignal(LOW, &status);
-        EXPECT_FALSE(status.stateChanged) << "Should not have changed state";
-        EXPECT_EQ(status.state, HIGH) << "Should not have toggled state";
-        fakeTimers.advance(durationIncrease);
-    }
-}
-
 TEST_F(V2PushButtonSwitchServiceTest, ResetChangeDetectionOnLow)
 {
     const unsigned int seenSignalTimes = test::randomNumber(100, 600);
@@ -163,8 +121,8 @@ TEST_F(V2PushButtonSwitchServiceTest, ResetChangeDetectionOnLow)
     for (int i = 0; i < minIterations * 3; i++)
     {
         svc->processSignal(LOW, &status);
-        EXPECT_FALSE(status.stateChanged) << "Should reset stateChanged flag";
         EXPECT_EQ(status.state, HIGH) << "Should keep currentState";
+        EXPECT_EQ(status.pendingState, LOW) << "Should reset pending state";
         EXPECT_EQ(status.seenSignalTimes, 0) << "Should reset seen signal times";
         EXPECT_EQ(status.seenSignalSince, 0) << "Should reset seen signal since";
         fakeTimers.advance(durationIncrease);
@@ -183,6 +141,19 @@ TEST_F(V2PushButtonSwitchServiceTest, getTargetStatePassIfLow)
     v2::Switch status{.state = LOW};
     EXPECT_EQ(svc->getTargetState(HIGH, &status), HIGH) << "Should pass state as is";
     EXPECT_EQ(svc->getTargetState(LOW, &status), LOW) << "Should pass state as is";
+}
+
+TEST_F(V2PushButtonSwitchServiceTest, applyStateChangeShouldReset)
+{
+    v2::Switch status;
+
+    status.state = HIGH;
+    status.stateChanged = true;
+
+    svc->applyStateChange(&status);
+
+    EXPECT_FALSE(status.stateChanged) << "Should have reset the state";
+    EXPECT_EQ(status.state, LOW) << "Should have reset the state";
 }
 
 TEST_F(V2ToggleButtonSwitchServiceTest, ChangeStateFromLowToHighWhenSeenHighSignalEnough)
@@ -258,11 +229,15 @@ TEST_F(V2ToggleButtonSwitchServiceTest, ChangeStateFromHighToLowWhenSeenLowSigna
 TEST_F(V2ToggleButtonSwitchServiceTest, getTargetStateUseSwitchState)
 {
     v2::Switch status{.state = HIGH};
-    EXPECT_EQ(svc->getTargetState(HIGH, &status), HIGH) << "Should use switch state";;
-    EXPECT_EQ(svc->getTargetState(LOW, &status), HIGH) << "Should use switch state";;
+    EXPECT_EQ(svc->getTargetState(HIGH, &status), HIGH) << "Should use switch state";
+    ;
+    EXPECT_EQ(svc->getTargetState(LOW, &status), HIGH) << "Should use switch state";
+    ;
     status.state = LOW;
-    EXPECT_EQ(svc->getTargetState(HIGH, &status), LOW) << "Should use switch state";;
-    EXPECT_EQ(svc->getTargetState(LOW, &status), LOW) << "Should use switch state";;
+    EXPECT_EQ(svc->getTargetState(HIGH, &status), LOW) << "Should use switch state";
+    ;
+    EXPECT_EQ(svc->getTargetState(LOW, &status), LOW) << "Should use switch state";
+    ;
 }
 
 TEST_F(V2ToggleButtonSwitchServiceTest, applyStateChangeShouldReset)

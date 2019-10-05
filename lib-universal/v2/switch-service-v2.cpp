@@ -21,9 +21,9 @@ PushButtonSwitchService::PushButtonSwitchService(SwitchServiceConfig cfg) : Swit
 
 void PushButtonSwitchService::processSignal(uint8_t signal, Switch *sw)
 {
-    service_log("Processing signal %d, seen times: %d, since: %d", signal, sw->seenSignalTimes, sw->seenSignalSince);
     if (signal == HIGH)
     {
+        service_log("Processing signal %d, seen times: %d, since: %d", signal, sw->seenSignalTimes, sw->seenSignalSince);
         sw->seenSignalTimes += 1;
         unsigned long now = cfg.timers->millis();
         if (sw->seenSignalSince == 0)
@@ -34,39 +34,36 @@ void PushButtonSwitchService::processSignal(uint8_t signal, Switch *sw)
 
         const unsigned int signalDuration = now - sw->seenSignalSince;
 
-        if (sw->stateChanged)
-        {
-            service_log("The state got already changed to %d", sw->state);
-            return;
-        }
-
         if (sw->seenSignalTimes >= cfg.minSignalIterations &&
-            signalDuration >= cfg.minSignalDurationMs)
+            signalDuration >= cfg.minSignalDurationMs &&
+            sw->pendingState != signal)
         {
+            sw->state = sw->pendingState = HIGH;
             sw->stateChanged = true;
-            sw->state = sw->state == LOW ? HIGH : LOW;
             service_log("State change detected. Signal duration: %d, new state: %d", signalDuration, sw->state);
         }
     }
     else
     {
-        sw->stateChanged = false;
         sw->seenSignalTimes = 0;
         sw->seenSignalSince = 0;
+        sw->pendingState = LOW;
     }
 }
 
 byte PushButtonSwitchService::getTargetState(byte currentValue, Switch *sw)
 {
-    if(sw->state == HIGH)
+    if (sw->state == HIGH)
     {
         return currentValue == HIGH ? LOW : HIGH;
     }
     return currentValue;
 }
 
-void PushButtonSwitchService::applyStateChange(Switch *aSwitch)
+void PushButtonSwitchService::applyStateChange(Switch *sw)
 {
+    sw->stateChanged = false;
+    sw->state = LOW;
 }
 
 ToggleButtonSwitchService::ToggleButtonSwitchService(SwitchServiceConfig cfg) : SwitchService(cfg)
