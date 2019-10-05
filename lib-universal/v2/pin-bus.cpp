@@ -64,7 +64,7 @@ const void PinBus::setPin(const byte pinIndex, byte state)
 
 #ifdef ARDUINO
 
-PCF8574Bus::PCF8574Bus(const byte outputBoardsNum, const byte inputBoardsNum)
+PCF8574Bus::PCF8574Bus(const byte outputBoardsNum, const byte inputBoardsNum, bool invert)
     : outputBoardsNum(outputBoardsNum), inputBoardsNum(inputBoardsNum), PinBus(outputBoardsNum + inputBoardsNum)
 {
     const auto busSize = this->getBusSize();
@@ -78,6 +78,8 @@ PCF8574Bus::PCF8574Bus(const byte outputBoardsNum, const byte inputBoardsNum)
 
     // Skip init to have initial values logged
     prevBusState = new byte[busSize];
+
+    this->invert = invert;
 }
 
 PCF8574Bus::~PCF8574Bus()
@@ -99,7 +101,7 @@ void PCF8574Bus::readState()
 {
     for (size_t i = 0; i < this->getBusSize(); i++)
     {
-        const auto byteValue = boards[i]->read8();
+        const byte byteValue = invert ? ~boards[i]->read8() : boards[i]->read8();
         this->setStateByte(i, byteValue);
         if (this->prevBusState[i] != byteValue)
         {
@@ -119,7 +121,7 @@ void PCF8574Bus::writeState()
         {
             pin_bus_log("Write board byte: %d, value: %b", i, byteValue);
         }
-        boards[i]->write8(byteValue);
+        boards[i]->write8(invert ? ~byteValue : byteValue);
         this->prevBusState[i] = byteValue;
     }
 }

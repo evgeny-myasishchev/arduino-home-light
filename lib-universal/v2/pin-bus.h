@@ -49,13 +49,22 @@ class PCF8574Bus : public PinBus
 private:
     byte outputBoardsNum;
     byte inputBoardsNum;
+    bool invert;
 
     PCF8574 **boards;
 
     // Used mostly to reduce logging noise
     byte *prevBusState;
 public:
-    PCF8574Bus(const byte outputBoardsNum, const byte inputBoardsNum);
+    PCF8574Bus(
+        const byte outputBoardsNum, 
+        const byte inputBoardsNum,
+
+        // By default signals are HIGH off/no-signal
+        // Invert flag will return HIGH when LOW
+        // and write HIGH when LOW
+        bool invert
+    );
     ~PCF8574Bus();
 
     void setup(const byte initialState);

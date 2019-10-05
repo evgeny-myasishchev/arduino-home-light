@@ -5,14 +5,14 @@
 #include <switches-router-v2.h>
 
 // Test mode will only use pin bus, see below
-#define TEST_MODE
+// #define TEST_MODE
 
-// #include "routes/test-routes.h"
-#include "routes/fl-2-routes.h"
+#include "routes/test-routes.h"
+// #include "routes/fl-2-routes.h"
 
 using namespace v2;
 
-PCF8574Bus bus(RELAY_BOARDS, INPUT_BOARDS);
+PCF8574Bus bus(RELAY_BOARDS, INPUT_BOARDS, true);
 
 SwitchesRouter *router;
 
