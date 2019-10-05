@@ -50,6 +50,7 @@ public:
     SwitchService(SwitchServiceConfig cfg);
     virtual ~SwitchService();
     virtual void processSignal(byte signal, Switch *sw) = 0;
+    virtual byte getTargetState(byte currentValue, Switch *sw) = 0;
     virtual void applyStateChange(Switch *sw) = 0;
 };
 
@@ -66,6 +67,7 @@ class PushButtonSwitchService : public SwitchService
 public:
     PushButtonSwitchService(SwitchServiceConfig cfg);
     void processSignal(uint8_t signal, Switch *sw);
+    byte getTargetState(byte currentValue, Switch *sw);
     void applyStateChange(Switch *sw);
 };
 
@@ -82,6 +84,7 @@ class ToggleButtonSwitchService : public SwitchService
 public:
     ToggleButtonSwitchService(SwitchServiceConfig cfg);
     void processSignal(uint8_t signal, Switch *sw);
+    byte getTargetState(byte currentValue, Switch *sw);
     void applyStateChange(Switch *sw);
 };
 

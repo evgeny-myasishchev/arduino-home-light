@@ -16,7 +16,8 @@ class MockSwitchService : public SwitchService
 {
 public:
     MockSwitchService() : SwitchService(SwitchServiceConfig{}) {}
-    MOCK_METHOD(void, processSignal, (uint8_t signal, Switch *sw));
+    MOCK_METHOD(void, processSignal, (byte signal, Switch *sw));
+    MOCK_METHOD(byte, getTargetState, (byte currentValue, Switch *sw));
     MOCK_METHOD(void, applyStateChange, (Switch * sw));
 };
 

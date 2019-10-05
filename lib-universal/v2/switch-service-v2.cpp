@@ -56,6 +56,11 @@ void PushButtonSwitchService::processSignal(uint8_t signal, Switch *sw)
     }
 }
 
+byte PushButtonSwitchService::getTargetState(byte currentValue, Switch *sw)
+{
+    return 0;
+}
+
 void PushButtonSwitchService::applyStateChange(Switch *aSwitch)
 {
 }
@@ -67,7 +72,8 @@ ToggleButtonSwitchService::ToggleButtonSwitchService(SwitchServiceConfig cfg) : 
 void ToggleButtonSwitchService::processSignal(byte signal, Switch *sw)
 {
     unsigned long now = cfg.timers->millis();
-    if(sw->state == signal) {
+    if (sw->state == signal)
+    {
         return;
     }
 
@@ -94,6 +100,11 @@ void ToggleButtonSwitchService::processSignal(byte signal, Switch *sw)
         sw->seenSignalTimes = 1;
         sw->pendingState = signal;
     }
+}
+
+byte ToggleButtonSwitchService::getTargetState(byte currentValue, Switch *sw)
+{
+    return 0;
 }
 
 void ToggleButtonSwitchService::applyStateChange(Switch *sw)
