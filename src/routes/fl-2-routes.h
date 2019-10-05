@@ -25,8 +25,8 @@ ArrayPtr<Switch *> createRoutes()
     }
 
     // Last board is controlling all
-    byte* allRelays = new byte[RELAY_BOARDS];
-    for (byte relayNum = 0; relayNum < RELAY_BOARDS; relayNum++)
+    byte* allRelays = new byte[RELAY_BOARDS * 8];
+    for (byte relayNum = 0; relayNum < RELAY_BOARDS * 8; relayNum++)
     {
         allRelays[relayNum] = relayNum;
     }
