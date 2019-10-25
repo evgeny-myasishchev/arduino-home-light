@@ -1,3 +1,5 @@
+# Moved to monorepo https://github.com/evgeny-myasishchev/my-home/tree/master/light-controller
+
 # Home light controller
 
 ## Usage
